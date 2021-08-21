@@ -14,3 +14,4 @@ jobs:
       with:
         targets: ""
         override-deps: |
+        args: "-c .ansible-lint"
