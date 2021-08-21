@@ -14,5 +14,3 @@ $> sudo pacman -Syy ansible
 $> ansible-pull 
 
 ```
-
-For further customization, edit `vars/vars.yml` to fit your needs.
