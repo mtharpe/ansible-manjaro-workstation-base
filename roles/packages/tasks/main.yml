@@ -9,7 +9,7 @@
 
 - name: Install common desktop packages
   become: yes
-  pacman: name={{ item }} state=present
+  yay: name={{ item }} update_cache=yes state=present
   with_items:
     - 1password
     - alacritty
@@ -78,3 +78,16 @@
   with_items:
     - nativefier
     - electron
+
+- name: Restart vbox
+  become: yes
+  command: vboxreload
+
+- name: Get Starship Prompt
+  get_url: url=https://starship.rs/install.sh
+
+- name: Install Starship Prompt
+  shell: /tmp/install.sh
+
+- name: Remove Starship Prompt Installer
+  file: path=/tmp/installer.sh state=absent
