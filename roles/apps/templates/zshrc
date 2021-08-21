@@ -1,0 +1,45 @@
+# {{ ansible_managed }}
+
+# ZSH completion to ignore case
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+# ZSH opts
+setopt NO_CASE_GLOB
+setopt AUTO_CD
+
+# GNUPG
+GPG_TTY=$(tty)
+export GPG_TTY
+
+# System Commands
+alias c='clear'
+alias ls='exa'
+alias ll='exa --header --long'
+alias cat='bat'
+alias grep='rg'
+
+# Git Ops
+alias git_all="printf "\\\\n" && find . -maxdepth 4 -type d -name \".git\" -execdir python -c 'import os; from termcolor import colored, cprint; cprint(colored(os.path.abspath(\".\"), \"blue\"))' \; -execdir git pull \;"
+
+# MLocate Settings
+alias updatedb='sudo updatedb'
+
+# Editors
+alias vi='nvim'
+alias vim='nvim'
+
+# Package Management
+alias pupdate='sudo pacman -Syyu --noconfirm'
+alias pinstall='sudo pacman -Syy --noconfirm '
+alias premove='sudo pacman -R '
+alias psearch='sudo pacman -Ss '
+alias yinstall='yay -Syy --noconfirm '
+alias yremove='yay -R '
+alias ysearch='yay -Ss '
+
+# Use Starship
+eval "$(starship init zsh)"
+
+# Setup Direnv
+eval "$(direnv hook zsh)"
