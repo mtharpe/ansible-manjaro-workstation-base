@@ -1,0 +1,79 @@
+---
+- name: get the username running the deploy
+  become: false
+  delegate_to: localhost
+  command: whoami
+  register: local_user
+
+- name: Get Gnome Profile
+  shell: gsettings get org.gnome.Terminal.ProfilesList default  | awk -F \' '{print $2}'
+  become_user: "{{ local_user }}"
+  register: profile
+
+- name: Setup Gnome
+  dconf:
+    key: "{{ item.k }}"
+    value: "{{ item.v }}"
+    state: present
+  become_user: "{{ local_user }}"
+  loop:
+    - k: "/org/gnome/desktop/interface/clock-format"
+      v: "'12h'"
+    - k: "/org/gnome/desktop/interface/cursor-theme"
+      v: "'Adwaita'"
+    - k: "/org/gnome/desktop/interface/enable-hot-corners"
+      v: "false"
+    - k: "/org/gnome/desktop/interface/gtk-theme"
+      v: "'Matcha-dark-azul'"
+    - k: "/org/gnome/desktop/interface/icon-theme"
+      v: "'Papirus-Dark'"
+    - k: "/org/gnome/desktop/interface/show-battery-percentage"
+      v: "true"
+    - k: "/org/gnome/desktop/datetime/automatic-timezone"
+      v: "true"
+    - k: "/org/gnome/desktop/privacy/remember-app-usage"
+      v: "false"
+    - k: "/org/gnome/system/location/enabled"
+      v: "true"
+    - k: "/org/gnome/system/location/max-accuracy-level"
+      v: "'exact'"
+    - k: "/org/gnome/terminal/legacy/confirm-close"
+      v: "false"
+    - k: "/org/gnome/terminal/legacy/shell-integration-enabled"
+      v: "true"
+    - k: "/org/gnome/terminal/legacy/theme-variant"
+      v: "'dark'"
+    - k: "/org/gnome/terminal/legacy/unified-menu"
+      v: "false"
+    - k: "/org/gnome/shell/overrides/dynamic-workspaces"
+      v: "false"
+    - k: "/org/gnome/shell/overrides/workspaces-only-on-primary"
+      v: "true"
+    - k: "/org/gnome/shell/window-switcher/current-workspace-only"
+      v: "false"
+    - k: "/org/gnome/desktop/peripherals/touchpad/natural-scroll"
+      v: "false"
+    - k: "/org/gnome/peripherals/mouse/natural-scroll"
+      v: "false"
+    - k: "/org/gnome/settings-daemon/plugins/power/ambient-enabled"
+      v: "false"
+    - k: "/org/gnome/settings-daemon/plugins/power/idle-brightness"
+      v: "50"
+    - k: "/org/gnome/mutter/dynamic-workspaces"
+      v: "false"
+    - k: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic"
+      v: "false"
+
+- name: Setup Gnome Terminal
+  shell: "{{ item }}"
+  become_user: "{{ local_user }}"
+  loop:
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ visible-name Default"
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ use-system-font false"
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ font 'Monospace 14'"
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ cell-height-scale '1.2'"
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ audible-bell false"
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ scrollback-unlimited false"
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ scrollbar-policy never"
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ use-custom-command true"
+    - "gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ custom-command /usr/bin/tmux"

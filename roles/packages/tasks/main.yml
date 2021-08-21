@@ -1,0 +1,80 @@
+---
+- name: Install base packages
+  become: yes
+  pacman: name={{ item }} state=present
+  with_items:
+    - base-devel
+    - linux-headers
+    - yay
+
+- name: Install common desktop packages
+  become: yes
+  pacman: name={{ item }} state=present
+  with_items:
+    - 1password
+    - alacritty
+    - auto-cpufreq
+    - bat
+    - consul
+    - direnv
+    - exa
+    - google-chrome
+    - htop
+    - mlocate
+    - nautilus
+    - nautilus-admin
+    - nautilus-empty-file
+    - neovim
+    - nomad
+    - noto-fonts
+    - noto-fonts-compat
+    - npm
+    - owncloud-client
+    - packer
+    - powertop
+    - preload
+    - ripgrep
+    - slack-desktop
+    - speedtest-cli
+    - terraform
+    - tmux
+    - transmission-gtk
+    - vagrant
+    - vault
+    - virtualbox
+    - visual-studio-code-bin
+    - ansible
+    - ansible-lint
+    - chef-workstation
+    - google-cloud-sdk
+    - kubectl
+    - gimp
+    - blender
+    - kubectl
+
+- name: Remove common desktop packages
+  become: yes
+  pacman: name={{ item }} state=absent
+  with_items:
+    - geary
+    - firefox-gnome-theme-maia
+    - firefox
+    - sushi
+    - evince
+    - simple-scan
+    - gnome-calendar
+    - gnome-contacts
+    - gnome-maps
+    - gthumb
+    - gnome-system-log
+    - lollypop
+    - gnome-todo
+    - totem
+    - caffeine-ng
+
+- name: Install npm modules
+  become: yes
+  npm: name={{ item }} state=present global=yes
+  with_items:
+    - nativefier
+    - electron
