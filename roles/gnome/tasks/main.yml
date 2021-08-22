@@ -1,10 +1,4 @@
 ---
-- name: get the username running the deploy
-  become: false
-  delegate_to: localhost
-  command: whoami
-  register: local_user
-
 - name: Get Gnome Profile
   shell: gsettings get org.gnome.Terminal.ProfilesList default  | awk -F \' '{print $2}'
   become_user: "{{ local_user }}"
