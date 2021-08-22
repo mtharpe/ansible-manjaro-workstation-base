@@ -50,6 +50,7 @@
     - blender
     - kubectl
     - starship
+    - manjaro-printer
 
 - name: Remove common desktop packages
   pacman: name={{ item }} state=absent
