@@ -29,6 +29,6 @@ Vagrant.configure("2") do |config|
     pacman -Syyu --noconfirm 
     pacman -Syy --noconfirm ansible
     git clone https://github.com/mtharpe/ansible-manjaro-workstation-base.git /home/vagrant/ansible-manjaro-workstation-base
-    cd /home/vagrant/ansible-manjaro-workstation-base && ansible-playbook site.yml
+    cd /home/vagrant/ansible-manjaro-workstation-base && ansible-playbook --extra-vars local_user=vagrant site.yml 
   SHELL
 end
