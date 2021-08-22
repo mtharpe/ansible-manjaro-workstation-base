@@ -1,14 +1,19 @@
 ---
 - name: Install base packages
-  pacman: name={{ item }} state=present
-  with_items:
+  pacman:
+    name: "{{ item }}"
+    state: present
+  loop:
     - base-devel
     - linux-headers
     - yay
 
 - name: Install common desktop packages
-  yay: name={{ item }} update_cache=yes state=present
-  with_items:
+  yay:
+    name: "{{ item }}" 
+    update_cache: yes 
+    state: present
+  loop:
     - 1password
     - alacritty
     - auto-cpufreq
@@ -51,10 +56,29 @@
     - kubectl
     - starship
     - manjaro-printer
+    - a52dec
+    - faac
+    - faad2
+    - flac
+    - jasper
+    - lame
+    - libdca
+    - libdv
+    - libmad
+    - libmpeg2
+    - libtheora
+    - libvorbis
+    - libxv
+    - opus
+    - wavpack
+    - x264
+    - xvidcore
 
 - name: Remove common desktop packages
-  pacman: name={{ item }} state=absent
-  with_items:
+  pacman:
+    name: "{{ item }}" 
+    state: absent
+  loop:
     - geary
     - firefox-gnome-theme-maia
     - firefox
@@ -72,8 +96,11 @@
     - caffeine-ng
 
 - name: Install npm modules
-  npm: name={{ item }} state=present global=yes
-  with_items:
+  npm:
+    name: "{{ item }}" 
+    state: present
+    global: yes
+  loop:
     - nativefier
     - electron
 
