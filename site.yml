@@ -3,8 +3,8 @@
   become: yes
   roles:
   - packages
-    #  - gnome
-    #- apps
+  - gnome
+  - apps
 
   vars:
     local_user: ""
