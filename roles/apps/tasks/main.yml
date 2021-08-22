@@ -2,7 +2,7 @@
 # Setup Alacritty and make it the default Terminal in Gnome
 - name: Create a directory if it does not exist
   file:
-    path: /home/"{{ local_user }}"/.config/alacritty
+    path: /home/{{ local_user }}/.config/alacritty
     state: directory
     owner: "{{ local_user }}"
     group: "wheel"
@@ -11,7 +11,7 @@
 - name: Template alacritty.yml
   copy:
     src: templates/alacritty.yml
-    dest: /home/"{{ local_user }}"/.config/alacritty/alacritty.yml
+    dest: /home/{{ local_user }}/.config/alacritty/alacritty.yml
     owner: "{{ local_user }}"
     group: "wheel"
     mode: '0644'
@@ -20,7 +20,7 @@
 - name: Template starship.toml
   copy:
     src: templates/starship.toml
-    dest: /home/"{{ local_user }}"/.config/starship.toml
+    dest: /home/{{ local_user }}/.config/starship.toml
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
@@ -29,7 +29,7 @@
 - name: Template .zshrc
   copy:
     src: templates/zshrc
-    dest: /home/"{{ local_user }}"/.zshrc
+    dest: /home/{{ local_user }}/.zshrc
     owner: "{{ local_user }}"
     group: wheel
     mode: '0600'
