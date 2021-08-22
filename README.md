@@ -11,6 +11,10 @@ Follow these steps to install Ansible, and run the playbook:
 ```
 $> sudo pacman -Syy ansible
 
-$> ansible-pull 
+$> git pull https://github.com/mtharpe/ansible-manjaro-workstation-base.git
+
+$> cd ansible-manjaro-workstation-base
+
+$> ansible-playbook --extra-vars local_user=<username>
 
 ```

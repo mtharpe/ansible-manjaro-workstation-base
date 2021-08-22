@@ -1,6 +1,10 @@
 ---
 - hosts: localhost
+  become: yes
   roles:
   - packages
   - gnome
   - apps
+
+  vars:
+    local_user: ""
