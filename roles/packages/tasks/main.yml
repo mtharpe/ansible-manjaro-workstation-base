@@ -1,6 +1,5 @@
 ---
 - name: Install base packages
-  become: yes
   pacman: name={{ item }} state=present
   with_items:
     - base-devel
@@ -8,7 +7,6 @@
     - yay
 
 - name: Install common desktop packages
-  become: yes
   yay: name={{ item }} update_cache=yes state=present
   with_items:
     - 1password
@@ -51,9 +49,9 @@
     - gimp
     - blender
     - kubectl
+    - starship
 
 - name: Remove common desktop packages
-  become: yes
   pacman: name={{ item }} state=absent
   with_items:
     - geary
@@ -73,21 +71,10 @@
     - caffeine-ng
 
 - name: Install npm modules
-  become: yes
   npm: name={{ item }} state=present global=yes
   with_items:
     - nativefier
     - electron
 
 - name: Restart vbox
-  become: yes
   command: vboxreload
-
-- name: Get Starship Prompt
-  get_url: url=https://starship.rs/install.sh
-
-- name: Install Starship Prompt
-  shell: /tmp/install.sh
-
-- name: Remove Starship Prompt Installer
-  file: path=/tmp/installer.sh state=absent
