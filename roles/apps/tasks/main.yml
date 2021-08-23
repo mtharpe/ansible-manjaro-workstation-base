@@ -16,6 +16,24 @@
     group: "wheel"
     mode: '0644'
 
+- name: Template alacritty.desktop
+  copy:
+    src: templates/alacritty.desktop
+    dest: /home/{{ local_user }}/.local/share/applications/alacritty.desktop
+    owner: "{{ local_user }}"
+    group: "wheel"
+    mode: '0644'
+
+- name: stat org.gnome.Terminal
+  stat: 
+    path: /usr/share/applications/org.gnome.Terminal.desktop
+  register: gnome_desktop_icon
+
+- name: Move foo to bar
+  command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
+  when: gnome_desktop_icon.stat.exists
+
+
 # Setup Starship prompt config
 - name: Template starship.toml
   copy:
