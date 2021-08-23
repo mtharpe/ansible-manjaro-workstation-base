@@ -33,3 +33,24 @@
     owner: "{{ local_user }}"
     group: wheel
     mode: '0600'
+
+# Setup TMUX conf file
+- name: Template .tmux.conf
+  copy:
+    src: templates/tmux.conf
+    dest: /home/{{ local_user }}/.tmux.conf
+    owner: "{{ local_user }}"
+    group: wheel
+    mode: '0600'
+- name: Create tmux directory
+  file:
+    path: /home/{{ local_user }}/.tmux/plugins/tpm
+    state: directory
+    owner: "{{ local_user }}"
+    group: "wheel"
+    mode: '0755'
+
+- name: Clone TPM repo
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: /home/{{ local_user}}/.tmux/plugins/tpm

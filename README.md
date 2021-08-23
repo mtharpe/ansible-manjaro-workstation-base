@@ -18,3 +18,15 @@ $> cd ansible-manjaro-workstation-base
 $> ansible-playbook --extra-vars local_user=<username>
 
 ```
+
+or
+
+```
+
+$> git pull https://github.com/mtharpe/ansible-manjaro-workstation-base.git
+
+$> cd ansible-manjaro-workstation-base
+
+$> ./run.sh
+
+```
