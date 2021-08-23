@@ -4,6 +4,11 @@
   become_user: "{{ local_user }}"
   register: profile
 
+- name: File Browser Shortcut
+  dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/home"
+    value: "['<Super>e']"
+
 - name: Setup Gnome
   dconf:
     key: "{{ item.k }}"
@@ -57,12 +62,6 @@
       v: "false"
     - k: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic"
       v: "false"
-    - k: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name"
-      v: "'File Explorer'"
-    - k: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command"
-      v: "'nautilus --new-window'"
-    - k: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding"
-      v: "'<Super>e'"
 
 - name: Setup Gnome Terminal
   shell: "{{ item }}"
