@@ -4,11 +4,6 @@
   become_user: "{{ local_user }}"
   register: profile
 
-- name: File Browser Shortcut
-  dconf:
-    key: "/org/gnome/settings-daemon/plugins/media-keys/home"
-    value: "['<Super>e']"
-
 - name: Setup Gnome
   dconf:
     key: "{{ item.k }}"
