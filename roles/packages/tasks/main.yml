@@ -74,6 +74,7 @@
     - wavpack
     - x264
     - xvidcore
+    - python-pip
 
 - name: Remove common desktop packages
   pacman:
@@ -107,3 +108,6 @@
 
 - name: Restart vbox
   command: vboxreload
+  
+- name: Install PIP modules
+  command: pip install termcolor
