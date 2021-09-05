@@ -75,6 +75,7 @@
     - x264
     - xvidcore
     - python-pip
+    - google-calendar-nativefier
 
 - name: Remove common desktop packages
   pacman:
