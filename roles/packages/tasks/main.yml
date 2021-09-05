@@ -23,6 +23,7 @@
     - exa
     - google-chrome
     - htop
+    - sysstat
     - mlocate
     - nautilus
     - nautilus-admin
