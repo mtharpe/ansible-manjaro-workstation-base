@@ -23,6 +23,7 @@
     - exa
     - google-chrome
     - htop
+    - sysstat
     - mlocate
     - nautilus
     - nautilus-admin
@@ -107,6 +108,6 @@
 
 - name: Restart vbox
   command: vboxreload
-
+  
 - name: Install PIP modules
   command: pip install termcolor
