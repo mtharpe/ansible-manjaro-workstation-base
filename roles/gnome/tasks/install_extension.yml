@@ -33,6 +33,9 @@
         src: "{{ r_gnome_extension_download.dest }}"
         dest: "/home/{{ local_user }}/.local/share/gnome-shell/extensions/{{ gnome_extension_info.uuid }}"
         remote_src: yes
+        owner: "{{ local_user }}"
+        group: "{{ local_user }}"
+        mode: 0775
 
     - name: Enable Gnome Shell extension - {{ gnome_extension_info.name }}
       command: gnome-shell-extension-tool --enable-extension {{ gnome_extension_info.uuid }}
