@@ -42,8 +42,8 @@ alias ysearch='yay -Ss '
 alias yupdate='yay -Syyu'
 
 # Sync to and from Desktop/Laptop
-alias push_laptop='rsync -avhc ~/src tharpem@172.16.20.81:~'
-alias push_desktop='rsync -avhc ~/src tharpem@172.16.20.80:~'
+alias push_laptop="rsync -avhc ~/src $(whoami)@172.16.20.81:~"
+alias push_desktop="rsync -avhc ~/src $(whoami)@172.16.20.80:~"
 
 # Use Starship
 eval "$(starship init zsh)"
