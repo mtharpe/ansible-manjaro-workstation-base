@@ -76,6 +76,8 @@
     - xvidcore
     - python-pip
     - google-calendar-nativefier
+    - dotnet-sdk
+    - dotnet-runtime
 
 - name: Remove common desktop packages
   pacman:
@@ -98,17 +100,21 @@
     - totem
     - caffeine-ng
 
-- name: Install npm modules
-  npm:
-    name: "{{ item }}" 
-    state: present
-    global: yes
-  loop:
-    - nativefier
-    - electron
-
 - name: Restart vbox
   command: vboxreload
   
 - name: Install PIP modules
   command: pip install termcolor
+
+- name: Disable Google Calendar Built-in icon
+  become: yes
+  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
+
+- name: Disable Alacritty Built-in icon
+  become: yes
+  command: mv /usr/share/applications/alacritty.desktop /usr/share/applications/alacritty.desktop.not
+
+- name: Disable Gnome-Terminal Built-in icon
+  become: yes
+  command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
+
