@@ -73,3 +73,21 @@
   git:
     repo: https://github.com/tmux-plugins/tpm
     dest: /home/{{ local_user}}/.tmux/plugins/tpm
+
+# Setup Gmail Icon
+- name: Template gmail.desktop
+  copy:
+    src: templates/gmail.desktop
+    dest: /home/{{ local_user }}/.local/share/applications/gmail.desktop
+    owner: "{{ local_user }}"
+    group: wheel
+    mode: '0644'
+
+# Setup Gcal Icon
+- name: Template gcal.desktop
+  copy:
+    src: templates/gcal.desktop
+    dest: /home/{{ local_user }}/.local/share/applications/gcal.desktop
+    owner: "{{ local_user }}"
+    group: wheel
+    mode: '0644'
