@@ -14,10 +14,12 @@ export GPG_TTY
 
 # System Commands
 alias c='clear'
+alias l='exa'
 alias ls='exa'
 alias ll='exa --header --long'
 alias cat='bat'
 alias grep='rg'
+alias updatedb='sudo updatedb'
 
 # Git Ops
 alias git_all="printf "\\\\n" && find . -maxdepth 4 -type d -name \".git\" -execdir python -c 'import os; from termcolor import colored, cprint; cprint(colored(os.path.abspath(\".\"), \"blue\"))' \; -execdir git pull \;"
@@ -30,13 +32,18 @@ alias vi='nvim'
 alias vim='nvim'
 
 # Package Management
-alias pupdate='sudo pacman -Syyu --noconfirm'
 alias pinstall='sudo pacman -Syy --noconfirm '
 alias premove='sudo pacman -R '
 alias psearch='sudo pacman -Ss '
+alias pupdate='sudo pacman -Syyu --noconfirm'
 alias yinstall='yay -Syy --noconfirm '
 alias yremove='yay -R '
 alias ysearch='yay -Ss '
+alias yupdate='yay -Syyu'
+
+# Sync to and from Desktop/Laptop
+alias push_laptop='rsync -avhc ~/src tharpem@172.16.20.81:~'
+alias push_desktop='rsync -avhc ~/src tharpem@172.16.20.80:~'
 
 # Use Starship
 eval "$(starship init zsh)"
