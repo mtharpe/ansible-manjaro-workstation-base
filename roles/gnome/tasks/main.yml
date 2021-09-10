@@ -99,3 +99,6 @@
   with_items:
   - firefox-theme.desktop 
   - manjaro-hello.desktop
+
+- name: Set GDM theme
+  command: set-gdm-theme set
