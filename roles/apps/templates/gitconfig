@@ -1,0 +1,19 @@
+[includeIf "gitdir:~/src/github/**"]
+    path = ~/src/github/.gitconfig
+[includeIf "gitdir:~/src/gitlab/**"]
+    path = ~/src/gitlab/.gitconfig
+[includeIf "gitdir:~/src/pixelmap/**"]
+    path = ~/src/pixelmap/.gitconfig
+[commit]
+    gpgsign = true
+
+[user]
+	email = mtharpe@hashicorp.com
+	name = Michael Tharpe
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[pull]
+	ff = only

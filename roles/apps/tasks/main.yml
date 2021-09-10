@@ -95,6 +95,14 @@
     repo: https://github.com/tmux-plugins/tpm
     dest: /home/{{ local_user}}/.tmux/plugins/tpm
 
+- name: Template .gitconfig
+  copy:
+    src: templates/gitconfig
+    dest: /home/{{ local_user }}/.gitconfig
+    owner: "{{ local_user }}"
+    group: wheel
+    mode: '0644'
+
 # Setup Gmail Icon
 - name: Template gmail.desktop
   copy:
