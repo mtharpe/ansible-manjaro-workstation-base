@@ -108,7 +108,8 @@
   command: pip install termcolor
 
 - name: Stat GCal Desktop Icon
-  stat: path=/usr/share/applications/google-calendar-nativefier.desktop
+  stat: 
+    path: "/usr/share/applications/google-calendar-nativefier.desktop"
   register: gcal_stat
 
 - name: Disable Google Calendar Built-in icon
@@ -117,7 +118,8 @@
   when: gcal_stat.stat.exists
 
 - name: Stat Alacritty Desktop Icon
-  stat: path=/usr/share/applications/Alacritty.desktop
+  stat: 
+    path: "/usr/share/applications/Alacritty.desktop"
   register: alacritty_stat
 
 - name: Disable Alacritty Built-in icon
@@ -126,7 +128,8 @@
   when: alacritty_stat.stat.exists
 
 - name: Stat Gnome Terminal Desktop Icon
-  stat: path=/usr/share/applications/org.gnome.Terminal.desktop
+  stat: 
+    path: "/usr/share/applications/org.gnome.Terminal.desktop"
   register: gnome_terminal_stat
 
 - name: Disable Gnome-Terminal Built-in icon
