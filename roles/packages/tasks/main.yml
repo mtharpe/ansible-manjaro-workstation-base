@@ -80,6 +80,7 @@
     - dotnet-runtime
     - nmap
     - manjaro-tools-iso
+    - gdm-tools-git
 
 - name: Remove common desktop packages
   pacman:
