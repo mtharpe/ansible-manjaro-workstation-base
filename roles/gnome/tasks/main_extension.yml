@@ -23,3 +23,10 @@
     gnome_extension_info: "{{ item.json }}"
   loop: "{{ r_gnome_extension_info.results }}"
   when: item.status == 200
+
+- name: Set Permissions for all extensions
+  file:
+    dest: "/home/{{ local_user }}/.local/share/gnome-shell/extensions"
+    group: "{{ local_user }}"
+    mode: 0775
+    recurse: yes
