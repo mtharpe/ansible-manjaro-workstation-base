@@ -24,14 +24,35 @@
     group: "wheel"
     mode: '0644'
 
-- name: stat org.gnome.Terminal
+- name: Stat GCal Desktop Icon
   stat: 
-    path: /usr/share/applications/org.gnome.Terminal.desktop
-  register: gnome_desktop_icon
+    path: "/usr/share/applications/google-calendar-nativefier.desktop"
+  register: gcal_stat
 
-- name: Move Gnome Terminal to .not
+- name: Disable Google Calendar Built-in icon
+  become: yes
+  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
+  when: gcal_stat.stat.exists
+
+- name: Stat Alacritty Desktop Icon
+  stat: 
+    path: "/usr/share/applications/Alacritty.desktop"
+  register: alacritty_stat
+
+- name: Disable Alacritty Built-in icon
+  become: yes
+  command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not
+  when: alacritty_stat.stat.exists
+
+- name: Stat Gnome Terminal Desktop Icon
+  stat: 
+    path: "/usr/share/applications/org.gnome.Terminal.desktop"
+  register: gnome_terminal_stat
+
+- name: Disable Gnome-Terminal Built-in icon
+  become: yes
   command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
-  when: gnome_desktop_icon.stat.exists
+  when: gnome_terminal_stat.stat.exists
 
 
 # Setup Starship prompt config
