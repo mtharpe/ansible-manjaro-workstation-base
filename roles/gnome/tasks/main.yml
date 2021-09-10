@@ -19,6 +19,8 @@
       v: "false"
     - k: "/org/gnome/desktop/interface/gtk-theme"
       v: "'Matcha-dark-azul'"
+    - k: "/org/gnome/shell/extensions/user-theme/name"
+      v: "'Matcha-dark-azul'"
     - k: "/org/gnome/desktop/interface/icon-theme"
       v: "'Papirus-Dark'"
     - k: "/org/gnome/desktop/interface/show-battery-percentage"
@@ -57,6 +59,8 @@
       v: "false"
     - k: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic"
       v: "false"
+    - k: "/org/gnome/shell/weather/automatic-location"
+      v: "true"
 
 - name: Setup Gnome Terminal
   shell: "{{ item }}"
