@@ -61,6 +61,8 @@
       v: "false"
     - k: "/org/gnome/shell/weather/automatic-location"
       v: "true"
+    - k: "/org/gnome/shell/favorite-apps"
+      v: "['google-chrome.desktop', 'gmail.desktop', 'gcal.desktop', 'slack.desktop', 'visual-studio-code.desktop', 'alacritty.desktop']"
 
 - name: Setup Gnome Terminal
   shell: "{{ item }}"
