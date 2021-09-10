@@ -91,3 +91,11 @@
     - 2594
 
 - include_tasks: remove_extension.yml
+
+- name: Remove extra Manjaro junk files
+  file:
+    path: " /etc/skel/.config/autostart/{{ item }}"
+    state: absent
+  with_items:
+  - firefox-theme.desktop 
+  - manjaro-hello.desktop
