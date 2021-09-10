@@ -81,6 +81,7 @@
     - nmap
     - manjaro-tools-iso
     - gdm-tools-git
+    - preload
 
 - name: Remove common desktop packages
   pacman:
