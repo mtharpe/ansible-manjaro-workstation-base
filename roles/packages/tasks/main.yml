@@ -78,6 +78,7 @@
     - google-calendar-nativefier
     - dotnet-sdk
     - dotnet-runtime
+    - nmap
 
 - name: Remove common desktop packages
   pacman:
