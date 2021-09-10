@@ -79,6 +79,7 @@
     - dotnet-sdk
     - dotnet-runtime
     - nmap
+    - manjaro-tools-iso
 
 - name: Remove common desktop packages
   pacman:
