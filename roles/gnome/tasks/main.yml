@@ -84,4 +84,4 @@
     - 4135
     - 2594
 
-- include_tasks: remove_extensions.yml
+- include_tasks: remove_extension.yml
