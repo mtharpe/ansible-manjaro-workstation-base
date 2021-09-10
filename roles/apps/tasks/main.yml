@@ -29,7 +29,7 @@
     path: /usr/share/applications/org.gnome.Terminal.desktop
   register: gnome_desktop_icon
 
-- name: Move foo to bar
+- name: Move Gnome Terminal to .not
   command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
   when: gnome_desktop_icon.stat.exists
 
