@@ -1,6 +1,6 @@
 ---
 
-- name: Check if Gnome Shell extension is already installed - {{ gnome_extension_info.name }}
+- name: Check if Gnome Shell extension is already installed - "{{ gnome_extension_info.name }}"
   stat:
     path: "/home/{{ local_user }}/.local/share/gnome-shell/extensions/{{ gnome_extension_info.uuid }}/metadata.json"
   register: r_gnome_extensions_check_existing
@@ -13,13 +13,13 @@
   changed_when: no
   when: r_gnome_extensions_check_existing.stat.exists == False
 
-- name: Download Gnome Shell extension - {{ gnome_extension_info.name }}
+- name: Download Gnome Shell extension - "{{ gnome_extension_info.name }}"
   get_url:
     url: https://extensions.gnome.org{{ gnome_extension_info.download_url }}
     dest: "{{ r_gnome_extension_download_dir.path }}/{{ gnome_extension_info.uuid }}.zip"
   register: r_gnome_extension_downloa
 
-- name: Create install directory - {{ gnome_extension_info.name }}
+- name: Create install directory - "{{ gnome_extension_info.name }}"
   file:
     path: "/home/{{ local_user }}/.local/share/gnome-shell/extensions/{{ gnome_extension_info.uuid }}"
     state: directory
@@ -27,7 +27,7 @@
     group: "{{ local_user }}"
     mode: 0775
 
-- name: Install Gnome Shell extension - {{ gnome_extension_info.name }}
+- name: Install Gnome Shell extension - "{{ gnome_extension_info.name }}"
   unarchive:
     src: "{{ r_gnome_extension_download.dest }}"
     dest: "/home/{{ local_user }}/.local/share/gnome-shell/extensions/{{ gnome_extension_info.uuid }}"
@@ -36,8 +36,8 @@
     group: "{{ local_user }}"
     mode: 077
 
-- name: Enable Gnome Shell extension - {{ gnome_extension_info.name }}
-  command: gnome-shell-extension-tool --enable-extension {{ gnome_extension_info.uuid }}
+- name: Enable Gnome Shell extension - "{{ gnome_extension_info.name }}"
+  command: gnome-shell-extension-tool --enable-extension "{{ gnome_extension_info.uuid }}"
   always:
     - name: Delete temporary download directory
       file:
