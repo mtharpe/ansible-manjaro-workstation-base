@@ -113,7 +113,7 @@
 
 - name: Disable Alacritty Built-in icon
   become: yes
-  command: mv /usr/share/applications/alacritty.desktop /usr/share/applications/alacritty.desktop.not
+  command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not
 
 - name: Disable Gnome-Terminal Built-in icon
   become: yes
