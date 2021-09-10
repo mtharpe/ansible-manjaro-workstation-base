@@ -114,7 +114,7 @@
 
 - name: Disable Google Calendar Built-in icon
   become: yes
-  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not || true
+  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
   when: gcal_stat.stat.exists
 
 - name: Stat Alacritty Desktop Icon
@@ -124,7 +124,7 @@
 
 - name: Disable Alacritty Built-in icon
   become: yes
-  command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not || true
+  command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not
   when: alacritty_stat.stat.exists
 
 - name: Stat Gnome Terminal Desktop Icon
@@ -134,5 +134,5 @@
 
 - name: Disable Gnome-Terminal Built-in icon
   become: yes
-  command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not || true
+  command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
   when: gnome_terminal_stat.stat.exists
