@@ -13,6 +13,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     pacman -Syyu --noconfirm 
     git clone https://github.com/mtharpe/ansible-manjaro-workstation-base.git /home/vagrant/ansible-manjaro-workstation-base
-    cd ansible-manjaro-workstation-base/vagrant && sh vagrant_run.sh
+    cd ansible-manjaro-workstation-base && sh vagrant_run.sh
   SHELL
 end
