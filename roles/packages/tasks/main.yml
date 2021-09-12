@@ -82,6 +82,8 @@
     - manjaro-tools-iso
     - gdm-tools-git
     - preload
+    - lm_sensors
+    - xsensors
 
 - name: Remove common desktop packages
   pacman:
