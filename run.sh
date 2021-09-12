@@ -15,4 +15,15 @@ until ansible-playbook --extra-vars "local_user=${USER}" site.yml; do
   sleep 10
 done
 
-sudo -u gdm dbus-launch --exit-with-session gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
+# Detect remote connection and do not run GDM settings because you will be disconnected!
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  SESSION_TYPE=remote/ssh
+else
+  case $(ps -o comm= -p $PPID) in
+    sshd|*/sshd) SESSION_TYPE=remote/ssh;;
+  esac
+fi
+
+if [ SESSION_TYPE = "remote/ssh" ]; then
+  sudo -u gdm dbus-launch --exit-with-session gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
+fi
