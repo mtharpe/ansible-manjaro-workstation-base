@@ -8,6 +8,11 @@
     group: "wheel"
     mode: '0755'
 
+- name: Stat alacritty.yml
+  stat:
+    path: "/home/{{ local_user }}/.config/alacritty/alacritty.yml"
+  register: alacritty_yml
+
 - name: Template alacritty.yml
   copy:
     src: templates/alacritty.yml
@@ -15,24 +20,21 @@
     owner: "{{ local_user }}"
     group: "wheel"
     mode: '0644'
+  when: not alacritty_yml.stat.exists
+
+- name: Stat alacritty.desktop
+  stat:
+    path: "/home/{{ local_user }}/.local/share/applications/alacritty.desktop"
+  register: alacritty_desktop
 
 - name: Template alacritty.desktop
   copy:
     src: templates/alacritty.desktop
-    dest: /home/{{ local_user }}/.local/share/applications/alacritty.desktop
+    dest: "/home/{{ local_user }}/.local/share/applications/alacritty.desktop"
     owner: "{{ local_user }}"
     group: "wheel"
     mode: '0644'
-
-- name: Stat GCal Desktop Icon
-  stat: 
-    path: "/usr/share/applications/google-calendar-nativefier.desktop"
-  register: gcal_stat
-
-- name: Disable Google Calendar Built-in icon
-  become: yes
-  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
-  when: gcal_stat.stat.exists
+  when: not alacritty_desktop.stat.exists
 
 - name: Stat Alacritty Desktop Icon
   stat: 
@@ -44,6 +46,18 @@
   command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not
   when: alacritty_stat.stat.exists
 
+# Setup GCal deskop
+- name: Stat GCal Desktop Icon
+  stat: 
+    path: "/usr/share/applications/google-calendar-nativefier.desktop"
+  register: gcal_stat
+
+- name: Disable Google Calendar Built-in icon
+  become: yes
+  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
+  when: gcal_stat.stat.exists
+
+# Disable Gnome Terminal Icons
 - name: Stat Gnome Terminal Desktop Icon
   stat: 
     path: "/usr/share/applications/org.gnome.Terminal.desktop"
