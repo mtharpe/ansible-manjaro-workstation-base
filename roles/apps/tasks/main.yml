@@ -131,7 +131,7 @@
 
 - name: Template .gitconfig
   copy:
-    src: templates/gitconfig
+    src: templates/config_files/gitconfig
     dest: /home/{{ local_user }}/.gitconfig
     owner: "{{ local_user }}"
     group: wheel
