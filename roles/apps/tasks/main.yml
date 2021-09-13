@@ -1,8 +1,27 @@
 ---
+# Setup Icons
+- name: Create icon directory in Pictures
+  file:
+    path: "/home/{{ local_user }}/Pictures/icons"
+    owner: "{{ local_user }}"
+    group: "wheel"
+    mode: '0660'
+
+- name: "Copy icon: {{ item }}"
+  copy:
+    src: "templates/images/{{ item }}"
+    dest: "/home/{{ local_user }}/Pictures/icons/{{ item }}"
+    owner: "{{ local_user }}"
+    group: "wheel"
+    mode: '0644'
+  loop:
+    - gcal.png
+    - gmail.png
+
 # Setup Alacritty and make it the default Terminal in Gnome
 - name: Create a directory if it does not exist
   file:
-    path: /home/{{ local_user }}/.config/alacritty
+    path: "/home/{{ local_user }}/.config/alacritty"
     state: directory
     owner: "{{ local_user }}"
     group: "wheel"
@@ -15,8 +34,8 @@
 
 - name: Template alacritty.yml
   copy:
-    src: templates/alacritty.yml
-    dest: /home/{{ local_user }}/.config/alacritty/alacritty.yml
+    src: templates/config_files/alacritty.yml
+    dest: "/home/{{ local_user }}/.config/alacritty/alacritty.yml"
     owner: "{{ local_user }}"
     group: "wheel"
     mode: '0644'
@@ -29,7 +48,7 @@
 
 - name: Template alacritty.desktop
   copy:
-    src: templates/alacritty.desktop
+    src: templates/gnome_desktop/alacritty.desktop
     dest: "/home/{{ local_user }}/.local/share/applications/alacritty.desktop"
     owner: "{{ local_user }}"
     group: "wheel"
@@ -43,7 +62,7 @@
 
 - name: Disable Alacritty Built-in icon
   become: yes
-  command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not
+  command: "mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not"
   when: alacritty_stat.stat.exists
 
 # Setup GCal deskop
@@ -54,7 +73,7 @@
 
 - name: Disable Google Calendar Built-in icon
   become: yes
-  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
+  command: "mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not"
   when: gcal_stat.stat.exists
 
 # Disable Gnome Terminal Icons
@@ -65,15 +84,15 @@
 
 - name: Disable Gnome-Terminal Built-in icon
   become: yes
-  command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
+  command: "mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not"
   when: gnome_terminal_stat.stat.exists
 
 
 # Setup Starship prompt config
 - name: Template starship.toml
   copy:
-    src: templates/starship.toml
-    dest: /home/{{ local_user }}/.config/starship.toml
+    src: templates/config_files/starship.toml
+    dest: "/home/{{ local_user }}/.config/starship.toml"
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
@@ -81,8 +100,8 @@
 # Setup ZSHRC file
 - name: Template .zshrc
   copy:
-    src: templates/zshrc
-    dest: /home/{{ local_user }}/.zshrc
+    src: templates/config_files/zshrc
+    dest: "/home/{{ local_user }}/.zshrc"
     owner: "{{ local_user }}"
     group: wheel
     mode: '0600'
@@ -90,15 +109,15 @@
 # Setup TMUX conf file
 - name: Template .tmux.conf
   copy:
-    src: templates/tmux.conf
-    dest: /home/{{ local_user }}/.tmux.conf
+    src: templates/config_files/tmux.conf
+    dest: "/home/{{ local_user }}/.tmux.conf"
     owner: "{{ local_user }}"
     group: wheel
     mode: '0600'
 
 - name: Create tmux directory
   file:
-    path: /home/{{ local_user }}/.tmux/plugins/tpm
+    path: "/home/{{ local_user }}/.tmux/plugins/tpm"
     state: directory
     owner: "{{ local_user }}"
     group: "wheel"
@@ -112,7 +131,7 @@
 - name: Template .gitconfig
   copy:
     src: templates/gitconfig
-    dest: /home/{{ local_user }}/.gitconfig
+    dest: "/home/{{ local_user }}/.gitconfig"
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
@@ -120,8 +139,8 @@
 # Setup Gmail Icon
 - name: Template gmail.desktop
   copy:
-    src: templates/gmail.desktop
-    dest: /home/{{ local_user }}/.local/share/applications/gmail.desktop
+    src: templates/gnome_desktop/gmail.desktop
+    dest: "/home/{{ local_user }}/.local/share/applications/gmail.desktop"
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
@@ -129,8 +148,8 @@
 # Setup Gcal Icon
 - name: Template gcal.desktop
   copy:
-    src: templates/gcal.desktop
-    dest: /home/{{ local_user }}/.local/share/applications/gcal.desktop
+    src: templates/gnome_desktop/gcal.desktop
+    dest: "/home/{{ local_user }}/.local/share/applications/gcal.desktop"
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
