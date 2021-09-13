@@ -16,7 +16,6 @@
   loop:
     - 1password
     - alacritty
-    - auto-cpufreq
     - bat
     - consul
     - direnv
@@ -112,7 +111,8 @@
 - name: Install PIP modules
   command: pip install termcolor
 
-- name: Start and Enable Auto-CPUFREQ
-  service:
-    name: auto-cpufreq
-    state: started
+- name: Set CPU to performance
+  cron:
+    name: "CPU Max"
+    special_time: reboot
+    job: "cpupower frequency-set -g performance"
