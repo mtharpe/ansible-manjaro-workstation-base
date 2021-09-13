@@ -35,7 +35,7 @@
 - name: Template alacritty.yml
   copy:
     src: templates/config_files/alacritty.yml
-    dest: "/home/{{ local_user }}/.config/alacritty/alacritty.yml"
+    dest: /home/{{ local_user }}/.config/alacritty/alacritty.yml
     owner: "{{ local_user }}"
     group: "wheel"
     mode: '0644'
@@ -62,7 +62,7 @@
 
 - name: Disable Alacritty Built-in icon
   become: yes
-  command: "mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not"
+  command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not
   when: alacritty_stat.stat.exists
 
 # Setup GCal deskop
@@ -73,7 +73,7 @@
 
 - name: Disable Google Calendar Built-in icon
   become: yes
-  command: "mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not"
+  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
   when: gcal_stat.stat.exists
 
 # Disable Gnome Terminal Icons
@@ -84,7 +84,7 @@
 
 - name: Disable Gnome-Terminal Built-in icon
   become: yes
-  command: "mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not"
+  command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
   when: gnome_terminal_stat.stat.exists
 
 
@@ -92,7 +92,7 @@
 - name: Template starship.toml
   copy:
     src: templates/config_files/starship.toml
-    dest: "/home/{{ local_user }}/.config/starship.toml"
+    dest: /home/{{ local_user }}/.config/starship.toml
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
@@ -101,7 +101,7 @@
 - name: Template .zshrc
   copy:
     src: templates/config_files/zshrc
-    dest: "/home/{{ local_user }}/.zshrc"
+    dest: /home/{{ local_user }}/.zshrc
     owner: "{{ local_user }}"
     group: wheel
     mode: '0600'
@@ -110,14 +110,14 @@
 - name: Template .tmux.conf
   copy:
     src: templates/config_files/tmux.conf
-    dest: "/home/{{ local_user }}/.tmux.conf"
+    dest: /home/{{ local_user }}/.tmux.conf
     owner: "{{ local_user }}"
     group: wheel
     mode: '0600'
 
 - name: Create tmux directory
   file:
-    path: "/home/{{ local_user }}/.tmux/plugins/tpm"
+    path: /home/{{ local_user }}/.tmux/plugins/tpm
     state: directory
     owner: "{{ local_user }}"
     group: "wheel"
@@ -131,7 +131,7 @@
 - name: Template .gitconfig
   copy:
     src: templates/gitconfig
-    dest: "/home/{{ local_user }}/.gitconfig"
+    dest: /home/{{ local_user }}/.gitconfig
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
@@ -140,7 +140,7 @@
 - name: Template gmail.desktop
   copy:
     src: templates/gnome_desktop/gmail.desktop
-    dest: "/home/{{ local_user }}/.local/share/applications/gmail.desktop"
+    dest: /home/{{ local_user }}/.local/share/applications/gmail.desktop
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
@@ -149,7 +149,7 @@
 - name: Template gcal.desktop
   copy:
     src: templates/gnome_desktop/gcal.desktop
-    dest: "/home/{{ local_user }}/.local/share/applications/gcal.desktop"
+    dest: /home/{{ local_user }}/.local/share/applications/gcal.desktop
     owner: "{{ local_user }}"
     group: wheel
     mode: '0644'
