@@ -6,8 +6,8 @@ if [ ! -f /bin/ansible ]; then
     sudo pacman -Syy --noconfirm ansible 
 fi
 
-if [ ! -f /etc/sudoers.d/tharpem ]; then
-    echo "tharpem ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/tharpem 
+if [ ! -f /etc/sudoers.d/${USER} ]; then
+    echo "${USER} ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/${USER} 
 fi
 
 until ansible-playbook --extra-vars "local_user=${USER}" site.yml; do
