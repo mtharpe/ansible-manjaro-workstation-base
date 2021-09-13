@@ -84,6 +84,7 @@
     - preload
     - lm_sensors
     - xsensors
+    - electron12
 
 - name: Remove common desktop packages
   pacman:
