@@ -3,6 +3,7 @@
 - name: Create icon directory in Pictures
   file:
     path: "/home/{{ local_user }}/Pictures/icons"
+    state: directory
     owner: "{{ local_user }}"
     group: "wheel"
     mode: '0660'
