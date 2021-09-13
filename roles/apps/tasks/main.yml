@@ -6,7 +6,7 @@
     state: directory
     owner: "{{ local_user }}"
     group: "wheel"
-    mode: '0660'
+    mode: '0755'
 
 - name: "Copy icon: {{ item }}"
   copy:
@@ -14,7 +14,7 @@
     dest: "/home/{{ local_user }}/Pictures/icons/{{ item }}"
     owner: "{{ local_user }}"
     group: "wheel"
-    mode: '0644'
+    mode: '0755'
   loop:
     - gcal.png
     - gmail.png
