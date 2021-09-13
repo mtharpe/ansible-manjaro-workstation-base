@@ -2,7 +2,7 @@
 # Setup Icons
 - name: Create icon directory in Pictures
   file:
-    path: "/home/{{ local_user }}/Pictures/icons"
+    path: /home/{{ local_user }}/Pictures/icons
     state: directory
     owner: "{{ local_user }}"
     group: "wheel"
@@ -10,8 +10,8 @@
 
 - name: "Copy icon: {{ item }}"
   copy:
-    src: "templates/images/{{ item }}"
-    dest: "/home/{{ local_user }}/Pictures/icons/{{ item }}"
+    src: templates/images/{{ item }}
+    dest: /home/{{ local_user }}/Pictures/icons/{{ item }}
     owner: "{{ local_user }}"
     group: "wheel"
     mode: '0755'
@@ -22,7 +22,7 @@
 # Setup Alacritty and make it the default Terminal in Gnome
 - name: Create a directory if it does not exist
   file:
-    path: "/home/{{ local_user }}/.config/alacritty"
+    path: /home/{{ local_user }}/.config/alacritty
     state: directory
     owner: "{{ local_user }}"
     group: "wheel"
@@ -30,7 +30,7 @@
 
 - name: Stat alacritty.yml
   stat:
-    path: "/home/{{ local_user }}/.config/alacritty/alacritty.yml"
+    path: /home/{{ local_user }}/.config/alacritty/alacritty.yml
   register: alacritty_yml
 
 - name: Template alacritty.yml
@@ -39,18 +39,17 @@
     dest: /home/{{ local_user }}/.config/alacritty/alacritty.yml
     owner: "{{ local_user }}"
     group: "wheel"
-    mode: '0644'
   when: not alacritty_yml.stat.exists
 
 - name: Stat alacritty.desktop
   stat:
-    path: "/home/{{ local_user }}/.local/share/applications/alacritty.desktop"
+    path: /home/{{ local_user }}/.local/share/applications/alacritty.desktop
   register: alacritty_desktop
 
 - name: Template alacritty.desktop
   copy:
     src: templates/gnome_desktop/alacritty.desktop
-    dest: "/home/{{ local_user }}/.local/share/applications/alacritty.desktop"
+    dest: /home/{{ local_user }}/.local/share/applications/alacritty.desktop
     owner: "{{ local_user }}"
     group: "wheel"
     mode: '0644'
@@ -58,7 +57,7 @@
 
 - name: Stat Alacritty Desktop Icon
   stat: 
-    path: "/usr/share/applications/Alacritty.desktop"
+    path: /usr/share/applications/Alacritty.desktop
   register: alacritty_stat
 
 - name: Disable Alacritty Built-in icon
@@ -69,7 +68,7 @@
 # Setup GCal deskop
 - name: Stat GCal Desktop Icon
   stat: 
-    path: "/usr/share/applications/google-calendar-nativefier.desktop"
+    path: /usr/share/applications/google-calendar-nativefier.desktop
   register: gcal_stat
 
 - name: Disable Google Calendar Built-in icon
@@ -80,7 +79,7 @@
 # Disable Gnome Terminal Icons
 - name: Stat Gnome Terminal Desktop Icon
   stat: 
-    path: "/usr/share/applications/org.gnome.Terminal.desktop"
+    path: /usr/share/applications/org.gnome.Terminal.desktop
   register: gnome_terminal_stat
 
 - name: Disable Gnome-Terminal Built-in icon
