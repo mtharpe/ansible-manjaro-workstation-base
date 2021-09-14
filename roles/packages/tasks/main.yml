@@ -85,6 +85,7 @@
     - lm_sensors
     - xsensors
     - electron12
+    - libdvdcss
 
 - name: Remove common desktop packages
   pacman:
