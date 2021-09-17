@@ -2,6 +2,8 @@
 
 USER=`whoami`
 
+sudo pacman -Syyu
+
 if [ ! -f /bin/ansible ]; then
     sudo pacman -Syy --noconfirm ansible 
 fi
