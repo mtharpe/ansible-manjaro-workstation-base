@@ -9,13 +9,13 @@ This is an opinionated playbook to setup a Manjaro Gnome workstation with everyt
 Follow these steps to install Ansible, and run the playbook:
 
 ```
-$> sudo pacman -Syy ansible
+sudo pacman -Syy ansible
 
-$> git pull https://github.com/mtharpe/ansible-manjaro-workstation-base.git
+git pull https://github.com/mtharpe/ansible-manjaro-workstation-base.git
 
-$> cd ansible-manjaro-workstation-base
+cd ansible-manjaro-workstation-base
 
-$> ansible-playbook --extra-vars local_user=<username>
+ansible-playbook --extra-vars local_user=<username>
 
 ```
 
@@ -23,10 +23,10 @@ or
 
 ```
 
-$> git pull https://github.com/mtharpe/ansible-manjaro-workstation-base.git
+git pull https://github.com/mtharpe/ansible-manjaro-workstation-base.git
 
-$> cd ansible-manjaro-workstation-base
+cd ansible-manjaro-workstation-base
 
-$> ./run.sh
+./run.sh
 
 ```
