@@ -86,6 +86,7 @@
     - xsensors
     - electron12
     - libdvdcss
+    - ocs-url
 
 - name: Remove common desktop packages
   pacman:
