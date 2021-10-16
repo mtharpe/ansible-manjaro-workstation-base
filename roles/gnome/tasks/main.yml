@@ -65,7 +65,6 @@
       v: "true"
     - k: "/org/gnome/shell/favorite-apps"
       v: "['google-chrome.desktop', 'gmail.desktop', 'gcal.desktop', 'slack.desktop', 'visual-studio-code.desktop', 'alacritty.desktop']"
-    - k: "/org/gnome/shell/app-picker-layout"
 
 - name: Setup Gnome Terminal
   shell: "{{ item }}"
