@@ -13,8 +13,6 @@
   loop:
     - k: "/org/gnome/desktop/interface/clock-format"
       v: "'12h'"
-    - k: "/org/gnome/desktop/interface/cursor-theme"
-      v: "'Adwaita'"
     - k: "/org/gnome/desktop/interface/enable-hot-corners"
       v: "false"
     - k: "/org/gnome/desktop/interface/gtk-theme"
@@ -67,6 +65,8 @@
       v: "true"
     - k: "/org/gnome/shell/favorite-apps"
       v: "['google-chrome.desktop', 'gmail.desktop', 'gcal.desktop', 'slack.desktop', 'visual-studio-code.desktop', 'alacritty.desktop']"
+    - k: "/org/gnome/shell/app-picker-layout"
+    - v: "[{'accessories': <{'position': <0>}>, 'system-tools': <{'position': <1>}>, 'cba22860-8c68-45d2-8ff4-f3cc536c513c': <{'position': <2>}>, 'db16e321-2e95-4296-8bcc-49decd1cc55d': <{'position': <3>}>, '2e0de4b3-25eb-4774-913e-f9f9e6197b28': <{'position': <4>}>}]"
 
 - name: Setup Gnome Terminal
   shell: "{{ item }}"
