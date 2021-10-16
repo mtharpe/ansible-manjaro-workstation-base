@@ -138,8 +138,8 @@
 
 # Setup Gmail Icon
 - name: Template gmail.desktop
-  copy:
-    src: templates/gnome_desktop/gmail.desktop
+  template:
+    src: templates/gnome_desktop/gmail.desktop.j2
     dest: /home/{{ local_user }}/.local/share/applications/gmail.desktop
     owner: "{{ local_user }}"
     group: wheel
@@ -147,8 +147,8 @@
 
 # Setup Gcal Icon
 - name: Template gcal.desktop
-  copy:
-    src: templates/gnome_desktop/gcal.desktop
+  template:
+    src: templates/gnome_desktop/gcal.desktop.j2
     dest: /home/{{ local_user }}/.local/share/applications/gcal.desktop
     owner: "{{ local_user }}"
     group: wheel
