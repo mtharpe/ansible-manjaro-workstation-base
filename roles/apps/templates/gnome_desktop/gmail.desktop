@@ -2,8 +2,8 @@
 Version=1.0
 Type=Application
 Name=Google Mail
-Icon="~/Pictures/icons/gmail.png"
-Exec=/home/tharpem/Applications/GoogleMail-linux-x64/GoogleMail
+Icon=/home/{{ local_user }}/Pictures/icons/gmail.png
+Exec=/home/{{ local_user }}/Applications/GoogleMail-linux-x64/GoogleMail
 Comment=Google Mail Client
 Categories=Google;
 Terminal=false
