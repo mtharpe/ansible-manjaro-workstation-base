@@ -127,4 +127,4 @@
     enabled: yes
 
 - name: Install npm packages
-  command: npm install -g electron nativefier node.js --unsafe-perm=true
+  command: npm install -g electron nativefier node.js --unsafe-perm=true --force
