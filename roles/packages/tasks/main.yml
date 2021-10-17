@@ -75,7 +75,6 @@
     - x264
     - xvidcore
     - python-pip
-    - google-calendar-nativefier
     - dotnet-sdk
     - dotnet-runtime
     - nmap
