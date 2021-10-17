@@ -126,3 +126,6 @@
     name: cups
     state: started
     enabled: yes
+
+- name: Install npm packages
+  command: npm install -g electron nativefier node.js --unsafe-perm=true
