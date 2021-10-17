@@ -119,3 +119,10 @@
   service:
     name: auto-cpufreq
     state: started
+    enabled: yes
+
+- name: Start and Enable CUPS
+  service:
+    name: cups
+    state: started
+    enabled: yes
