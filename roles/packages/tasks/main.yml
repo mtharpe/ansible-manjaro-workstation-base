@@ -86,6 +86,8 @@
     - electron12
     - libdvdcss
     - ocs-url
+    - gnome-clocks
+    - gnome-weather
 
 - name: Remove common desktop packages
   pacman:
