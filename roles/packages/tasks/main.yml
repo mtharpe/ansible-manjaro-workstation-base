@@ -15,7 +15,6 @@
     state: present
   loop:
     - 1password
-    - auto-cpufreq
     - alacritty
     - bat
     - consul
@@ -115,12 +114,6 @@
   
 - name: Install PIP modules
   command: pip install termcolor
-
-- name: Start and Enable Auto-CPUFREQ
-  service:
-    name: auto-cpufreq
-    state: started
-    enabled: yes
 
 - name: Start and Enable CUPS
   service:
