@@ -1,5 +1,3 @@
-[![SonarQube](https://github.com/mtharpe/ansible-manjaro-workstation-base/actions/workflows/sonarqube.yml/badge.svg)](https://github.com/mtharpe/ansible-manjaro-workstation-base/actions/workflows/sonarqube.yml)
-
 [![CircleCI](https://circleci.com/gh/mtharpe/ansible-manjaro-workstation-base/tree/main.svg?style=svg)](https://circleci.com/gh/mtharpe/ansible-manjaro-workstation-base/tree/main)
 
 # Manjaro Workstation Base
