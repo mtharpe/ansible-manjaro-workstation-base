@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
   
   config.vm.provision "shell", inline: <<-SHELL
     pacman -Syyu --noconfirm 
+    pacman -Syy --noconfirm python2-psutil
     git clone https://github.com/mtharpe/ansible-manjaro-workstation-base.git /home/vagrant/ansible-manjaro-workstation-base
   SHELL
 end
