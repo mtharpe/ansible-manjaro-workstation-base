@@ -2,7 +2,7 @@
 
 USER=`whoami`
 
-sudo pacman -Syyu
+sudo pacman -Syyu --noconfirm
 
 if [ ! -f /bin/ansible ]; then
     sudo pacman-mirrors --country United_States
