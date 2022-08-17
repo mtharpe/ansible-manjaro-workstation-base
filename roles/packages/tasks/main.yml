@@ -19,6 +19,8 @@
     - bat
     - consul
     - direnv
+    - docker
+    - docker-compose
     - exa
     - freeoffice
     - google-chrome
@@ -121,6 +123,12 @@
 - name: Start and Enable CUPS
   service:
     name: cups
+    state: started
+    enabled: yes
+
+- name: Start Docker
+  service:
+    name: docker
     state: started
     enabled: yes
 
