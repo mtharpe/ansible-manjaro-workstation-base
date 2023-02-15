@@ -109,9 +109,6 @@
     - gnome-todo
     - totem
     - caffeine-ng
-
-- name: Restart vbox
-  command: vboxreload
   
 - name: Install PIP modules
   command: pip install termcolor
