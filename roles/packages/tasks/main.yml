@@ -46,11 +46,9 @@
     - transmission-gtk
     - vagrant
     - vault
-    - virtualbox
     - visual-studio-code-bin
     - ansible
     - ansible-lint
-    - chef-workstation
     - google-cloud-sdk
     - kubectl
     - gimp
@@ -86,7 +84,6 @@
     - preload
     - lm_sensors
     - xsensors
-    - electron12
     - libdvdcss
     - ocs-url
     - gnome-clocks
@@ -132,4 +129,4 @@
     enabled: yes
 
 - name: Install npm packages
-  command: npm install -g electron nativefier node.js --unsafe-perm=true --force
+  command: npm install -g nativefier
