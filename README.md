@@ -30,3 +30,4 @@ cd ansible-manjaro-workstation-base
 ./run.sh
 
 ```
+
