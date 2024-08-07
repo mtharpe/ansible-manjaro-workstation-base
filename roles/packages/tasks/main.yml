@@ -10,8 +10,8 @@
 
 - name: Install common desktop packages
   yay:
-    name: "{{ item }}" 
-    update_cache: yes 
+    name: "{{ item }}"
+    update_cache: true
     state: present
   loop:
     - 1password
@@ -91,7 +91,7 @@
 
 - name: Remove common desktop packages
   pacman:
-    name: "{{ item }}" 
+    name: "{{ item }}"
     state: absent
   loop:
     - geary
@@ -109,21 +109,21 @@
     - gnome-todo
     - totem
     - caffeine-ng
-  
+
 - name: Install PIP modules
-  command: pip install termcolor
+  ansible.builtin.command: pip install termcolor
 
 - name: Start and Enable CUPS
-  service:
+  ansible.builtin.service:
     name: cups
     state: started
     enabled: yes
 
 - name: Start Docker
-  service:
+  ansible.builtin.service:
     name: docker
     state: started
     enabled: yes
 
 - name: Install npm packages
-  command: npm install -g nativefier
+  ansible.builtin.command: npm install -g nativefier
