@@ -62,6 +62,7 @@
     - flac
     - font-manager
     - jasper
+    - jq
     - lame
     - libdca
     - libdv
@@ -110,14 +111,14 @@
     - totem
     - caffeine-ng
 
-- name: Install PIP modules
-  ansible.builtin.command: pip install termcolor
+# - name: Install PIP modules
+#   ansible.builtin.command: pip install termcolor
 
-- name: Start and Enable CUPS
-  ansible.builtin.service:
-    name: cups
-    state: started
-    enabled: true
+# - name: Start and Enable CUPS (disabled currently because of the CUPS CVE-2024-47176, CVE-2024-47076, CVE-2024-47175, and CVE-2024-47177)
+#   ansible.builtin.service:
+#     name: cups
+#     state: started
+#     enabled: true
 
 - name: Start Docker
   ansible.builtin.service:
@@ -125,5 +126,5 @@
     state: started
     enabled: true
 
-- name: Install npm packages
-  ansible.builtin.command: npm install -g nativefier
+# - name: Install npm packages
+#   ansible.builtin.command: npm install -g nativefier
