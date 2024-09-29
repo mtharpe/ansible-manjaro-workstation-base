@@ -4,7 +4,7 @@
 - name: Parse Gnome Shell version
   shell: gnome-shell --version | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'
   register: r_gnome_extension_parse_shell_version
-  changed_when: no
+  changed_when: false
 
 - name: Set gnome_shell_version fact
   set_fact:
@@ -13,10 +13,10 @@
 - name: Get Gnome Shell extension info
   uri:
     url: https://extensions.gnome.org/extension-info/?pk={{ item }}&shell_version={{ gnome_shell_version }}
-    return_content: yes
+    return_content: true
   loop: "{{ gnome_extension_ids }}"
   register: r_gnome_extension_info
-  ignore_errors: yes
+  ignore_errors: true
 
 - include_tasks: install_extension.yml
   vars:
@@ -29,4 +29,4 @@
     dest: "/home/{{ local_user }}/.local/share/gnome-shell/extensions"
     group: "{{ local_user }}"
     mode: 0775
-    recurse: yes
+    recurse: true
