@@ -1,6 +1,6 @@
 ---
 - name: Install base packages
-  pacman:
+  community.general.pacman:
     name: "{{ item }}"
     state: present
   loop:
@@ -91,7 +91,7 @@
     - gnome-weather
 
 - name: Remove common desktop packages
-  pacman:
+  community.general.pacman:
     name: "{{ item }}"
     state: absent
   loop:
