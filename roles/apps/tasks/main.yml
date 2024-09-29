@@ -1,155 +1,155 @@
 ---
 # Setup Icons
 - name: Create icon directory in Pictures
-  file:
+  ansible.builtin.file:
     path: /home/{{ local_user }}/Pictures/icons
     state: directory
     owner: "{{ local_user }}"
-    group: "wheel"
-    mode: '0755'
+    group: wheel
+    mode: "0755"
 
 - name: "Copy icon: {{ item }}"
-  copy:
+  ansible.builtin.copy:
     src: templates/images/{{ item }}
     dest: /home/{{ local_user }}/Pictures/icons/{{ item }}
     owner: "{{ local_user }}"
-    group: "wheel"
-    mode: '0755'
+    group: wheel
+    mode: "0755"
   loop:
     - gcal.png
     - gmail.png
 
 # Setup Alacritty and make it the default Terminal in Gnome
 - name: Create a directory if it does not exist
-  file:
+  ansible.builtin.file:
     path: /home/{{ local_user }}/.config/alacritty
     state: directory
     owner: "{{ local_user }}"
-    group: "wheel"
-    mode: '0755'
+    group: wheel
+    mode: "0755"
 
 - name: Stat alacritty.yml
-  stat:
+  ansible.builtin.stat:
     path: /home/{{ local_user }}/.config/alacritty/alacritty.yml
   register: alacritty_yml
 
 - name: Template alacritty.yml
-  copy:
+  ansible.builtin.copy:
     src: templates/config_files/alacritty.yml
     dest: /home/{{ local_user }}/.config/alacritty/alacritty.yml
     owner: "{{ local_user }}"
-    group: "wheel"
+    group: wheel
+    mode: "0600"
   when: not alacritty_yml.stat.exists
 
 - name: Stat alacritty.desktop
-  stat:
+  ansible.builtin.stat:
     path: /home/{{ local_user }}/.local/share/applications/alacritty.desktop
   register: alacritty_desktop
 
 - name: Template alacritty.desktop
-  copy:
+  ansible.builtin.copy:
     src: templates/gnome_desktop/alacritty.desktop
     dest: /home/{{ local_user }}/.local/share/applications/alacritty.desktop
     owner: "{{ local_user }}"
-    group: "wheel"
-    mode: '0644'
+    group: wheel
+    mode: "0644"
   when: not alacritty_desktop.stat.exists
 
 - name: Stat Alacritty Desktop Icon
-  stat: 
+  ansible.builtin.stat:
     path: /usr/share/applications/Alacritty.desktop
   register: alacritty_stat
 
 - name: Disable Alacritty Built-in icon
   become: true
-  command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not
+  ansible.builtin.command: mv /usr/share/applications/Alacritty.desktop /usr/share/applications/Alacritty.desktop.not
   when: alacritty_stat.stat.exists
 
 # Setup GCal deskop
 - name: Stat GCal Desktop Icon
-  stat: 
+  ansible.builtin.stat:
     path: /usr/share/applications/google-calendar-nativefier.desktop
   register: gcal_stat
 
 - name: Disable Google Calendar Built-in icon
   become: true
-  command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
+  ansible.builtin.command: mv /usr/share/applications/google-calendar-nativefier.desktop /usr/share/applications/google-calendar-nativefier.desktop.not
   when: gcal_stat.stat.exists
 
 # Disable Gnome Terminal Icons
 - name: Stat Gnome Terminal Desktop Icon
-  stat: 
+  ansible.builtin.stat:
     path: /usr/share/applications/org.gnome.Terminal.desktop
   register: gnome_terminal_stat
 
 - name: Disable Gnome-Terminal Built-in icon
   become: true
-  command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
+  ansible.builtin.command: mv /usr/share/applications/org.gnome.Terminal.desktop /usr/share/applications/org.gnome.Terminal.desktop.not
   when: gnome_terminal_stat.stat.exists
-
 
 # Setup Starship prompt config
 - name: Template starship.toml
-  copy:
+  ansible.builtin.copy:
     src: templates/config_files/starship.toml
     dest: /home/{{ local_user }}/.config/starship.toml
     owner: "{{ local_user }}"
     group: wheel
-    mode: '0644'
+    mode: "0644"
 
 # Setup ZSHRC file
 - name: Template .zshrc
-  copy:
+  ansible.builtin.copy:
     src: templates/config_files/zshrc
     dest: /home/{{ local_user }}/.zshrc
     owner: "{{ local_user }}"
     group: wheel
-    mode: '0600'
+    mode: "0600"
 
 # Setup TMUX conf file
 - name: Template .tmux.conf
-  copy:
+  ansible.builtin.copy:
     src: templates/config_files/tmux.conf
     dest: /home/{{ local_user }}/.tmux.conf
     owner: "{{ local_user }}"
     group: wheel
-    mode: '0600'
+    mode: "0600"
 
 - name: Create tmux directory
-  file:
+  ansible.builtin.file:
     path: /home/{{ local_user }}/.tmux/plugins/tpm
     state: directory
     owner: "{{ local_user }}"
-    group: "wheel"
-    mode: '0755'
+    group: wheel
+    mode: "0755"
 
 - name: Clone TPM repo
-  git:
+  ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm
-    dest: /home/{{ local_user}}/.tmux/plugins/tpm
+    dest: /home/{{ local_user }}/.tmux/plugins/tpm
 
 - name: Template .gitconfig
-  copy:
+  ansible.builtin.copy:
     src: templates/config_files/gitconfig
     dest: /home/{{ local_user }}/.gitconfig
     owner: "{{ local_user }}"
     group: wheel
-    mode: '0644'
+    mode: "0644"
 
 # Setup Gmail Icon
 - name: Template gmail.desktop
-  template:
+  ansible.builtin.template:
     src: templates/gnome_desktop/gmail.desktop.j2
     dest: /home/{{ local_user }}/.local/share/applications/gmail.desktop
     owner: "{{ local_user }}"
     group: wheel
-    mode: '0644'
+    mode: "0644"
 
 # Setup Gcal Icon
 - name: Template gcal.desktop
-  template:
+  ansible.builtin.template:
     src: templates/gnome_desktop/gcal.desktop.j2
     dest: /home/{{ local_user }}/.local/share/applications/gcal.desktop
     owner: "{{ local_user }}"
     group: wheel
-    mode: '0644'
+    mode: "0644"
