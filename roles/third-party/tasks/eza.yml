@@ -1,0 +1,17 @@
+---
+# eza is in the official Arch/Manjaro repos
+- name: Install eza via pacman
+  community.general.pacman:
+    name: eza
+    state: present
+  become: true
+  tags: [third_party, eza]
+
+- name: Create symlink exa -> eza if exa not present
+  ansible.builtin.file:
+    src: /usr/bin/eza
+    dest: /usr/local/bin/exa
+    state: link
+  become: true
+  failed_when: false
+  tags: [third_party, eza]

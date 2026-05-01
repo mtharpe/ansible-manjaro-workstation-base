@@ -1,0 +1,38 @@
+---
+# Manjaro/Arch: refresh mirrors and pacman database. AUR repositories are accessed
+# via the `yay` helper (installed in packages.yml) instead of dedicated repo files.
+
+# Some base images (notably the molecule-built manjarolinux/base) ship with no
+# packages flagged as explicitly-installed. The community.general.pacman module
+# preflights every install with `pacman -Qe`, which exits rc=1 when there are
+# no explicit packages — and the module treats that as a hard failure. Seed the
+# local db with one explicit package so subsequent module calls succeed.
+- name: Refresh pacman package database (bootstrap)
+  ansible.builtin.command:
+    cmd: pacman -Sy --noconfirm
+  become: true
+  changed_when: false
+
+- name: Mark a base package as explicitly installed (work around community.general.pacman preflight)
+  ansible.builtin.command:
+    cmd: pacman -D --asexplicit bash
+  become: true
+  changed_when: false
+  failed_when: false
+
+- name: Refresh pacman keyring
+  community.general.pacman:
+    name:
+      - archlinux-keyring
+      - manjaro-keyring
+    state: latest
+    update_cache: true
+  become: true
+  failed_when: false
+
+- name: Refresh pacman package database
+  community.general.pacman:
+    update_cache: true
+    upgrade: false
+  become: true
+  changed_when: false

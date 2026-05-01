@@ -1,0 +1,16 @@
+---
+- name: Check for VSCode binary
+  ansible.builtin.stat:
+    path: /usr/bin/code
+  register: arch_vscode_installed
+  tags: [third_party, vscode]
+
+- name: Install VSCode (visual-studio-code-bin) from AUR via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed visual-studio-code-bin
+  become: true
+  become_user: "{{ local_user }}"
+  register: vscode_install
+  changed_when: "'Nothing to do' not in vscode_install.stdout"
+  when: not arch_vscode_installed.stat.exists
+  tags: [third_party, vscode]

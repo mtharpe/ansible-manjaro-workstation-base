@@ -1,99 +1,87 @@
 ---
-- name: Get Gnome Profile
-  ansible.builtin.shell: gsettings get org.gnome.Terminal.ProfilesList default  | awk -F \' '{print $2}'
-  become_user: "{{ local_user }}"
-  register: profile
-
 - name: Setup Gnome
   community.general.dconf:
     key: "{{ item.k }}"
     value: "{{ item.v }}"
     state: present
+  become: true
   become_user: "{{ local_user }}"
+  when: not is_container | default(false)
   loop:
     - k: /org/gnome/desktop/interface/clock-format
       v: "'12h'"
+
+    - k: /org/gnome/desktop/boxes/first-run
+      v: "false"
+
+    - k: /org/gnome/desktop/interface/cursor-theme
+      v: "'Adwaita'"
+
     - k: /org/gnome/desktop/interface/enable-hot-corners
       v: "false"
+
+    - k: /org/gnome/desktop/interface/gtk-theme
+      v: "'Adwaita-dark'"
+
+    - k: /org/gnome/desktop/interface/color-scheme
+      v: "'prefer-dark'"
+
+    - k: /org/gnome/desktop/interface/icon-theme
+      v: "'Adwaita'"
+
     - k: /org/gnome/desktop/interface/show-battery-percentage
       v: "true"
+
     - k: /org/gnome/desktop/datetime/automatic-timezone
       v: "true"
+
     - k: /org/gnome/desktop/privacy/remember-app-usage
       v: "false"
+
     - k: /org/gnome/system/location/enabled
       v: "true"
+
     - k: /org/gnome/system/location/max-accuracy-level
       v: "'exact'"
+
     - k: /org/gnome/terminal/legacy/confirm-close
       v: "false"
+
     - k: /org/gnome/terminal/legacy/shell-integration-enabled
       v: "true"
+
+    - k: /org/gnome/terminal/legacy/theme-variant
+      v: "'dark'"
+
     - k: /org/gnome/terminal/legacy/unified-menu
       v: "false"
+
     - k: /org/gnome/shell/overrides/dynamic-workspaces
       v: "false"
-    - k: /org/gnome/shell/overrides/workspaces-only-on-primary
-      v: "true"
-    - k: /org/gnome/shell/window-switcher/current-workspace-only
-      v: "false"
-    - k: /org/gnome/desktop/peripherals/touchpad/natural-scroll
-      v: "false"
-    - k: /org/gnome/peripherals/mouse/natural-scroll
-      v: "false"
-    - k: /org/gnome/settings-daemon/plugins/power/ambient-enabled
-      v: "false"
-    - k: /org/gnome/settings-daemon/plugins/power/idle-brightness
-      v: "50"
+
     - k: /org/gnome/mutter/dynamic-workspaces
       v: "false"
-    - k: /org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic
+
+    - k: /org/gnome/desktop/wm/preferences/num-workspaces
+      v: 5
+
+    - k: /org/gnome/shell/overrides/workspaces-only-on-primary
+      v: "true"
+
+    - k: /org/gnome/shell/window-switcher/current-workspace-only
       v: "false"
-    - k: /org/gnome/settings-daemon/plugins/color/night-light-enabled
+
+    - k: /org/gnome/desktop/peripherals/touchpad/natural-scroll
       v: "false"
-    - k: /ca/desrt/dconf-editor/automatic-night-mode
+
+    - k: /org/gnome/peripherals/mouse/natural-scroll
       v: "false"
+
+    - k: /org/gnome/desktop/wm/preferences/button-layout
+      v: "'appmenu:minimize,maximize,close'"
+
     - k: /org/gnome/shell/weather/automatic-location
       v: "true"
-    - k: /org/gnome/shell/favorite-apps
-      v: "['google-chrome.desktop', 'gmail.desktop', 'gcal.desktop', 'slack.desktop', 'visual-studio-code.desktop', 'alacritty.desktop']"
 
-- name: Setup Gnome Terminal
-  ansible.builtin.shell: "{{ item }}"
-  become_user: "{{ local_user }}"
-  loop:
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ visible-name Default
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ use-system-font false
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ font 'Monospace 14'
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ cell-height-scale '1.2'
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ audible-bell false
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ scrollback-unlimited false
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ scrollbar-policy never
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ use-custom-command true
-    - gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:{{ profile.stdout }}/ custom-command /usr/bin/tmux
-
-- ansible.builtin.include_tasks: main_extension.yml
-  vars:
-    gnome_extension_ids:
-      - 906
-      - 4099
-      - 16
-      - 4158
-      - 4052
-      - 615
-      - 4135
-      - 2594
-      - 1401
-      - 112
-
-- ansible.builtin.include_tasks: remove_extension.yml
-- name: Remove extra Manjaro junk files
-  ansible.builtin.file:
-    path: " /etc/skel/.config/autostart/{{ item }}"
-    state: absent
-  with_items:
-    - firefox-theme.desktop
-    - manjaro-hello.desktop
-
-- name: Set GDM theme
-  ansible.builtin.command: set-gdm-theme set
+    - k: /org/gnome/shell/weather/locations
+      v: "[<(uint32 2, <('Indianapolis', 'KIND', true, [(0.69333204535474746, -1.5059040078213661)], [(0.69408911682438501, -1.5037415099715601)])>)>]"

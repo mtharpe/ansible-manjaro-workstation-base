@@ -1,0 +1,18 @@
+---
+- name: Check if Slack is already installed
+  ansible.builtin.command:
+    cmd: pacman -Qi slack-desktop
+  register: slack_installed
+  changed_when: false
+  failed_when: false
+  tags: [third_party, slack]
+
+- name: Install Slack from AUR via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed slack-desktop
+  become: true
+  become_user: "{{ local_user }}"
+  register: slack_install
+  changed_when: "'Nothing to do' not in slack_install.stdout"
+  when: slack_installed.rc != 0
+  tags: [third_party, slack]

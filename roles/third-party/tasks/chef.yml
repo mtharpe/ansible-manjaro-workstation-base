@@ -1,0 +1,18 @@
+---
+- name: Check for Chef Workstation
+  ansible.builtin.stat:
+    path: /opt/chef-workstation/bin/chef
+  register: chef_installed
+  tags: [third_party, chef]
+
+- name: Install Chef Workstation from AUR via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed chef-workstation
+  become: true
+  become_user: "{{ local_user }}"
+  register: chef_install
+  changed_when: "'Nothing to do' not in chef_install.stdout"
+  retries: 3
+  when: not chef_installed.stat.exists
+  failed_when: false   # AUR build of chef-workstation can be flaky; tolerate
+  tags: [third_party, chef]

@@ -1,0 +1,56 @@
+---
+- name: Check for Wine
+  ansible.builtin.stat:
+    path: /usr/bin/wine
+  register: wine_installed
+  tags: [third_party, lutris]
+
+- name: Check for Lutris
+  ansible.builtin.stat:
+    path: /usr/bin/lutris
+  register: lutris_installed
+  tags: [third_party, lutris]
+
+- name: Install Wine
+  community.general.pacman:
+    name: wine
+    state: present
+  when: not wine_installed.stat.exists
+  become: true
+  tags: [third_party, lutris]
+
+- name: Install Lutris
+  community.general.pacman:
+    name: lutris
+    state: present
+  when: not lutris_installed.stat.exists
+  become: true
+  tags: [third_party, lutris]
+
+- name: Install Vulkan Loader
+  community.general.pacman:
+    name:
+      - vulkan-icd-loader
+      - lib32-vulkan-icd-loader
+      - vulkan-tools
+    state: present
+  when: not lutris_installed.stat.exists
+  become: true
+  tags: [third_party, lutris]
+
+- name: Install missing 32/64 bit libraries for Lutris
+  community.general.pacman:
+    name:
+      - lib32-freetype2
+      - freetype2
+      - lib32-gnutls
+      - gnutls
+      - lib32-libgpg-error
+      - libgpg-error
+      - lib32-sqlite
+      - sqlite
+    state: present
+  when: not lutris_installed.stat.exists
+  become: true
+  failed_when: false
+  tags: [third_party, lutris]

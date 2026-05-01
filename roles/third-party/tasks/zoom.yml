@@ -1,0 +1,9 @@
+---
+- name: Install Zoom from AUR via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed zoom
+  become: true
+  become_user: "{{ local_user }}"
+  register: zoom_install
+  changed_when: "'Nothing to do' not in zoom_install.stdout"
+  tags: [third_party, zoom]

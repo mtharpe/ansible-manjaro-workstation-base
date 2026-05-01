@@ -1,0 +1,19 @@
+---
+- name: Check if Spotify is already installed
+  ansible.builtin.command:
+    cmd: pacman -Qi spotify
+  register: spotify_installed
+  changed_when: false
+  failed_when: false
+  tags: [third_party, spotify]
+
+- name: Install Spotify from AUR via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed spotify
+  become: true
+  become_user: "{{ local_user }}"
+  register: spotify_install
+  changed_when: "'Nothing to do' not in spotify_install.stdout"
+  when: spotify_installed.rc != 0
+  failed_when: false   # AUR build occasionally fails on key import; tolerate
+  tags: [third_party, spotify]

@@ -1,0 +1,23 @@
+---
+- name: Check for Google Cloud SDK binary
+  ansible.builtin.stat:
+    path: /usr/bin/gcloud
+  register: gcloud_installed
+  tags: [third_party, gcloud]
+
+- name: Install Google Cloud SDK from AUR via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed google-cloud-sdk
+  become: true
+  become_user: "{{ local_user }}"
+  register: gcloud_install
+  changed_when: "'Nothing to do' not in gcloud_install.stdout"
+  when: not gcloud_installed.stat.exists
+  tags: [third_party, gcloud]
+
+- name: Install kubectl
+  community.general.pacman:
+    name: kubectl
+    state: present
+  become: true
+  tags: [third_party, gcloud]

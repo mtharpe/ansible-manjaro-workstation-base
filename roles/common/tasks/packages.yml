@@ -1,0 +1,223 @@
+---
+# Install base packages
+- name: Install base build tooling
+  community.general.pacman:
+    name:
+      - base-devel
+      - linux-headers
+      - git
+    state: present
+    update_cache: true
+  become: true
+
+# Install yay AUR helper from the official repo (Manjaro ships it; on Arch it's in AUR)
+- name: Install yay AUR helper
+  community.general.pacman:
+    name: yay
+    state: present
+  become: true
+  failed_when: false
+
+# Install base packages one-by-one, tolerating any single missing package
+# (Arch package names sometimes drift; e.g. autofs has been dropped from official
+# repos and is AUR-only on current Manjaro). Niche tools shouldn't block the
+# whole bootstrap.
+- name: Install base packages (best-effort)
+  community.general.pacman:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - direnv
+    - fail2ban
+    - ansible
+    - ansible-lint
+    - arpwatch
+    - autoconf
+    - automake
+    - cmake
+    - go
+    - github-cli
+    - htop
+    - fastfetch
+    - iotop
+    - jq
+    - lshw
+    - lsscsi
+    - nfs-utils
+    - ngrep
+    - nmap
+    - nmon
+    - npm
+    - speedtest-cli
+    - sysstat
+    - tmux
+    - transmission-gtk
+    - neovim
+    - terraform
+    - vault
+    - consul
+    - nomad
+    - packer
+    - python-psutil
+    - python-pip
+    - python-termcolor
+    - unzip
+    - alacritty
+    - vlc
+    - util-linux
+    - nextcloud-client
+    - gnome-shell-extensions
+  become: true
+  failed_when: false
+
+# AUR-only packages (1Password) installed via yay
+- name: Install AUR packages via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed 1password
+  become: true
+  become_user: "{{ local_user }}"
+  register: aur_install
+  changed_when: "'Nothing to do' not in aur_install.stdout"
+  failed_when: false
+
+# Install full ffmpeg + multimedia codec stack (Arch ships these in 'extra')
+- name: Install ffmpeg and multimedia codecs
+  community.general.pacman:
+    name:
+      - ffmpeg
+      - libva
+      - libva-utils
+      - gst-libav
+      - gst-plugins-bad
+      - gst-plugins-ugly
+      - a52dec
+      - faac
+      - faad2
+      - flac
+      - jasper
+      - lame
+      - libdca
+      - libdv
+      - libmad
+      - libmpeg2
+      - libtheora
+      - libvorbis
+      - libxv
+      - opus
+      - wavpack
+      - x264
+      - xvidcore
+    state: present
+  become: true
+  failed_when: false
+
+# Install OpenH264 codec (Arch ships gst-plugin-openh264 in extra)
+- name: Install OpenH264 plugin
+  community.general.pacman:
+    name:
+      - gst-plugin-openh264
+    state: present
+  become: true
+  failed_when: false
+
+# Install molecule for testing
+- name: Install molecule via pip
+  ansible.builtin.pip:
+    name: molecule
+    state: present
+    extra_args: --break-system-packages
+
+# Install molecule-podman driver for Molecule
+- name: Install molecule-podman driver via pip
+  ansible.builtin.pip:
+    name: molecule-podman
+    state: present
+    extra_args: --break-system-packages
+
+# Install podman only if docker is not requested
+- name: Install podman if docker is not enabled
+  community.general.pacman:
+    name:
+      - podman
+      - podman-docker
+    state: present
+  when: not install_docker | default(false)
+  become: true
+
+# Install extra fonts
+- name: Install extra fonts
+  community.general.pacman:
+    name:
+      - adobe-source-code-pro-fonts
+      - ttf-dejavu
+      - ttf-inconsolata
+      - ttf-liberation
+      - terminus-font
+      - ttf-anonymous-pro
+      - gnu-free-fonts
+      - noto-fonts
+    state: present
+  become: true
+
+# Optionally install a Nerd Font (FiraCode) for icons (starship, prompts)
+- name: Check if FiraCode Nerd Font is already installed
+  ansible.builtin.command:
+    cmd: fc-list | grep -i "Fira Code"
+  register: common_firacode_fonts
+  failed_when: false
+  changed_when: false
+  when: install_nerd_font | default(false)
+
+- name: Download FiraCode Nerd Font zip
+  ansible.builtin.get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
+    dest: /tmp/FiraCode.zip
+    mode: '0644'
+    force: true
+  when:
+    - install_nerd_font | default(false)
+    - common_firacode_fonts.rc != 0
+
+- name: Create nerd fonts directory
+  ansible.builtin.file:
+    path: /usr/local/share/fonts/nerdfonts
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  when: install_nerd_font | default(false)
+
+- name: Unarchive FiraCode Nerd Font
+  ansible.builtin.unarchive:
+    src: /tmp/FiraCode.zip
+    dest: /usr/local/share/fonts/nerdfonts
+    remote_src: true
+  become: true
+  register: common_firacode_unarchive
+  when: install_nerd_font | default(false)
+
+- name: Refresh font cache
+  ansible.builtin.command:
+    cmd: fc-cache -f -v
+  become: true
+  when:
+    - install_nerd_font | default(false)
+    - common_firacode_unarchive.changed | default(false)
+  changed_when: true
+
+# Uninstall unwanted apps
+- name: Uninstall junk apps
+  community.general.pacman:
+    name:
+      - firefox
+      - gnome-calendar
+      - gnome-contacts
+      - gnome-maps
+      - rhythmbox
+      - totem
+      - gnome-tour
+      - gnome-logs
+    state: absent
+  become: true
+  failed_when: false

@@ -1,0 +1,42 @@
+---
+- name: Check for Google Chrome binary
+  ansible.builtin.stat:
+    path: /usr/bin/google-chrome-stable
+  register: google_chrome_bin
+  tags: [third_party, chrome]
+
+- name: Install Google Chrome from AUR via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed google-chrome
+  become: true
+  become_user: "{{ local_user }}"
+  register: chrome_install
+  changed_when: "'Nothing to do' not in chrome_install.stdout"
+  when: not google_chrome_bin.stat.exists
+  tags: [third_party, chrome]
+
+- name: Check for user google-chrome.desktop
+  ansible.builtin.stat:
+    path: /home/{{ local_user }}/.local/share/applications/google-chrome.desktop
+  register: google_chrome_desktop
+  tags: [third_party, chrome]
+
+- name: Ensure user applications directory exists
+  ansible.builtin.file:
+    path: /home/{{ local_user }}/.local/share/applications
+    state: directory
+    owner: "{{ local_user }}"
+    group: wheel
+    mode: "0755"
+  become: true
+  tags: [third_party, chrome]
+
+- name: Deploy user google-chrome.desktop
+  ansible.builtin.copy:
+    src: templates/gnome_desktop/google-chrome.desktop
+    dest: /home/{{ local_user }}/.local/share/applications/google-chrome.desktop
+    owner: "{{ local_user }}"
+    group: wheel
+    mode: "0644"
+  when: not google_chrome_desktop.stat.exists
+  tags: [third_party, chrome]

@@ -1,0 +1,33 @@
+---
+- name: Install Docker packages
+  community.general.pacman:
+    name:
+      - docker
+      - docker-compose
+    state: present
+  become: true
+  tags: [third_party, docker]
+
+- name: Ensure docker group exists
+  ansible.builtin.group:
+    name: docker
+    state: present
+  become: true
+  tags: [third_party, docker]
+
+- name: Add user to docker group
+  ansible.builtin.user:
+    name: "{{ local_user }}"
+    groups: [docker]
+    append: true
+  become: true
+  tags: [third_party, docker]
+
+- name: Start and enable docker service
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+  become: true
+  when: not is_container | default(false)
+  tags: [third_party, docker]

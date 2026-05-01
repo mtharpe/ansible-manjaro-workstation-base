@@ -1,0 +1,16 @@
+---
+- name: Check for auto-cpufreq binary
+  ansible.builtin.stat:
+    path: /usr/bin/auto-cpufreq
+  register: autocpu_installed
+  tags: [third_party, autocpu]
+
+- name: Install auto-cpufreq from AUR via yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --needed auto-cpufreq
+  become: true
+  become_user: "{{ local_user }}"
+  register: autocpu_install
+  changed_when: "'Nothing to do' not in autocpu_install.stdout"
+  when: not autocpu_installed.stat.exists
+  tags: [third_party, autocpu]

@@ -1,0 +1,7 @@
+---
+- name: Setup user {{ local_user }}
+  ansible.builtin.user:
+    name: "{{ local_user }}"
+    home: /home/{{ local_user }}
+    groups: [wheel]
+    append: true
