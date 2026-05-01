@@ -2,6 +2,30 @@
 # Manjaro/Arch: refresh mirrors and pacman database. AUR repositories are accessed
 # via the `yay` helper (installed in packages.yml) instead of dedicated repo files.
 
+# pacman speed tuning — set BEFORE any install so the bigger downloads benefit.
+# Older pacman defaulted to serial downloads; modern pacman defaults to 5.
+# Bumping to 10 helps on a fast link.
+- name: Optimize pacman for parallel downloads
+  community.general.ini_file:
+    path: /etc/pacman.conf
+    section: options
+    option: ParallelDownloads
+    value: '10'
+    no_extra_spaces: true
+    mode: '0644'
+  become: true
+
+# makepkg.conf controls how AUR packages (built via yay) compile. Use every
+# CPU for parallel make and use a tmpfs build dir for less disk churn.
+- name: Optimize makepkg for parallel AUR builds
+  ansible.builtin.lineinfile:
+    path: /etc/makepkg.conf
+    regexp: '^#?\s*MAKEFLAGS='
+    line: 'MAKEFLAGS="-j$(nproc)"'
+    backrefs: false
+  become: true
+  failed_when: false   # makepkg.conf may not exist on minimal manjaro images
+
 # Some base images (notably the molecule-built manjarolinux/base) ship with no
 # packages flagged as explicitly-installed. The community.general.pacman module
 # preflights every install with `pacman -Qe`, which exits rc=1 when there are
