@@ -7,9 +7,9 @@
   failed_when: false
   tags: [third_party, slack]
 
-- name: Install Slack from AUR via yay
+- name: Install Slack from AUR
   ansible.builtin.command:
-    cmd: yay -S --noconfirm --needed slack-desktop
+    cmd: "{{ common_aur_helper }} -S --noconfirm --needed slack-desktop"
   become: true
   become_user: "{{ local_user }}"
   register: slack_install

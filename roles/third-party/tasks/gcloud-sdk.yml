@@ -5,9 +5,9 @@
   register: gcloud_installed
   tags: [third_party, gcloud]
 
-- name: Install Google Cloud SDK from AUR via yay
+- name: Install Google Cloud SDK from AUR
   ansible.builtin.command:
-    cmd: yay -S --noconfirm --needed google-cloud-sdk
+    cmd: "{{ common_aur_helper }} -S --noconfirm --needed google-cloud-sdk"
   become: true
   become_user: "{{ local_user }}"
   register: gcloud_install

@@ -1,5 +1,5 @@
 # Variables
-IMAGE_NAME := custom-manjaro-ansible
+IMAGE_NAME := custom-arch-ansible
 DOCKERFILE := molecule/default/Dockerfile
 ANSIBLE_HOME := $(CURDIR)/.ansible
 XDG_CACHE_HOME := $(CURDIR)/.cache

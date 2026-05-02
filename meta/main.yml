@@ -1,8 +1,8 @@
 galaxy_info:
-  role_name: manjaro_workstation_base   # use underscores, not dashes
+  role_name: arch_workstation_base   # use underscores, not dashes
   namespace: mtharpe            # use your Galaxy namespace or GitHub username
   author: your_name
-  description: Manjaro Workstation Base Role
+  description: Arch-family Workstation Base Role (Arch, Manjaro, CachyOS, EndeavourOS, Garuda, ...)
   company: your_company
   license: MIT
   min_ansible_version: "2.10"

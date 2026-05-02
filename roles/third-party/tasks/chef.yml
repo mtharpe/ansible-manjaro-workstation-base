@@ -5,9 +5,9 @@
   register: chef_installed
   tags: [third_party, chef]
 
-- name: Install Chef Workstation from AUR via yay
+- name: Install Chef Workstation from AUR
   ansible.builtin.command:
-    cmd: yay -S --noconfirm --needed chef-workstation
+    cmd: "{{ common_aur_helper }} -S --noconfirm --needed chef-workstation"
   become: true
   become_user: "{{ local_user }}"
   register: chef_install

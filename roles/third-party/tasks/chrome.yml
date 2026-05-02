@@ -5,9 +5,9 @@
   register: google_chrome_bin
   tags: [third_party, chrome]
 
-- name: Install Google Chrome from AUR via yay
+- name: Install Google Chrome from AUR
   ansible.builtin.command:
-    cmd: yay -S --noconfirm --needed google-chrome
+    cmd: "{{ common_aur_helper }} -S --noconfirm --needed google-chrome"
   become: true
   become_user: "{{ local_user }}"
   register: chrome_install

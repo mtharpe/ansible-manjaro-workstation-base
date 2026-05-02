@@ -1,6 +1,7 @@
 ---
 - name: Create systemd-tmpfiles
   ansible.builtin.command: /usr/bin/systemd-tmpfiles --prefix=/sys --create
+  changed_when: false
 - name: Restart sshd
   ansible.builtin.service:
     name: sshd

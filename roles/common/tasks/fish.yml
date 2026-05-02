@@ -76,6 +76,7 @@
     cmd: sh /tmp/starship_install.sh --yes
     creates: /usr/local/bin/starship
   when: install_starfish | default(false)
+  changed_when: false
 
 - name: Template starship config
   ansible.builtin.copy:
@@ -112,6 +113,7 @@
   become_user: "{{ local_user }}"
   args:
     executable: /usr/bin/fish
+  changed_when: false
 
 - name: Remove fish aliases script
   ansible.builtin.file:
@@ -128,6 +130,7 @@
     creates: "/home/{{ local_user }}/.config/fish/functions/fisher.fish"
   become: true
   become_user: "{{ local_user }}"
+  changed_when: false
 
 - name: Configure Fish to use Pure Prompt
   ansible.builtin.blockinfile:

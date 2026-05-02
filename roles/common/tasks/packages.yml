@@ -10,18 +10,68 @@
     update_cache: true
   become: true
 
-# Install yay AUR helper from the official repo (Manjaro ships it; on Arch it's in AUR)
-- name: Install yay AUR helper
+# AUR helper detection / bootstrap. The arch family varies in which AUR helper
+# (if any) ships in distro repos:
+#   - Manjaro / EndeavourOS / Garuda: `yay` is in official repos
+#   - CachyOS: ships `paru` by default
+#   - Vanilla Arch: no AUR helper in repos; must bootstrap from AUR
+- name: Detect existing AUR helper (yay)
+  ansible.builtin.command: which yay
+  register: common_yay_check
+  changed_when: false
+  failed_when: false
+
+- name: Detect existing AUR helper (paru)
+  ansible.builtin.command: which paru
+  register: common_paru_check
+  changed_when: false
+  failed_when: false
+
+- name: Try installing yay via pacman (works on Manjaro/EndeavourOS)
   community.general.pacman:
     name: yay
     state: present
   become: true
   failed_when: false
+  register: common_yay_pacman
+  when:
+    - common_yay_check.rc != 0
+    - common_paru_check.rc != 0
+
+- name: Bootstrap yay from AUR via makepkg
+  ansible.builtin.shell: |
+    set -euo pipefail
+    rm -rf /tmp/yay-bin
+    git clone --depth=1 https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
+    cd /tmp/yay-bin
+    makepkg -si --noconfirm
+  args:
+    creates: /usr/bin/yay
+    executable: /bin/bash
+  become: true
+  become_user: "{{ local_user }}"
+  when:
+    - common_yay_check.rc != 0
+    - common_paru_check.rc != 0
+    - common_yay_pacman is defined
+    - common_yay_pacman.failed | default(false)
+
+- name: Re-detect AUR helper after bootstrap
+  ansible.builtin.command: "which {{ item }}"
+  register: common_aur_recheck
+  changed_when: false
+  failed_when: false
+  loop:
+    - paru
+    - yay
+
+- name: Set AUR helper fact
+  ansible.builtin.set_fact:
+    common_aur_helper: "{{ 'paru' if common_paru_check.rc == 0 else 'yay' }}"
 
 # Install base packages one-by-one, tolerating any single missing package
-# (Arch package names sometimes drift; e.g. autofs has been dropped from official
-# repos and is AUR-only on current Manjaro). Niche tools shouldn't block the
-# whole bootstrap.
+# (Arch package names sometimes drift; some tools may be AUR-only on certain
+# arch-family variants). Niche tools shouldn't block the whole bootstrap.
 - name: Install base packages (best-effort)
   community.general.pacman:
     name: "{{ item }}"
@@ -70,14 +120,14 @@
   become: true
   failed_when: false
 
-# AUR-only packages (1Password) installed via yay
-- name: Install AUR packages via yay
+# AUR-only packages (1Password) installed via the detected AUR helper
+- name: Install AUR packages via AUR helper
   ansible.builtin.command:
-    cmd: yay -S --noconfirm --needed 1password
+    cmd: "{{ common_aur_helper }} -S --noconfirm --needed 1password"
   become: true
   become_user: "{{ local_user }}"
-  register: aur_install
-  changed_when: "'Nothing to do' not in aur_install.stdout"
+  register: common_aur_install
+  changed_when: "'Nothing to do' not in common_aur_install.stdout"
   failed_when: false
 
 # Install full ffmpeg + multimedia codec stack (Arch ships these in 'extra')

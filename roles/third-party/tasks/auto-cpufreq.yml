@@ -5,9 +5,9 @@
   register: autocpu_installed
   tags: [third_party, autocpu]
 
-- name: Install auto-cpufreq from AUR via yay
+- name: Install auto-cpufreq from AUR
   ansible.builtin.command:
-    cmd: yay -S --noconfirm --needed auto-cpufreq
+    cmd: "{{ common_aur_helper }} -S --noconfirm --needed auto-cpufreq"
   become: true
   become_user: "{{ local_user }}"
   register: autocpu_install

@@ -1,12 +1,18 @@
 [![CircleCI](https://circleci.com/gh/mtharpe/ansible-manjaro-workstation-base/tree/main.svg?style=svg)](https://circleci.com/gh/mtharpe/ansible-manjaro-workstation-base/tree/main)
 
-# Manjaro Workstation Base
+# Arch-family Workstation Base
 
-Ansible playbook and role collection that automates the setup of a **Manjaro/Arch** GNOME workstation for development and daily use.
+Ansible playbook and role collection that automates the setup of an **Arch-family**
+GNOME workstation for development and daily use. Supported distros include
+**Arch Linux**, **Manjaro**, **CachyOS**, **EndeavourOS**, and **Garuda** —
+anything that reports `os_family: Archlinux`.
+
+> This repo is named `ansible-manjaro-workstation-base` for historical reasons;
+> the playbook itself is distro-neutral within the Arch family.
 
 ## What this does
 
-Configures a Manjaro workstation with:
+Configures an Arch-family workstation with:
 
 - **Common packages** — developer tooling, fonts, multimedia codecs, system utilities (`roles/common`)
 - **Third-party apps** — Chrome, VS Code, Slack, Zoom, Docker, etc., gated by feature flags (`roles/third-party`)
@@ -14,13 +20,20 @@ Configures a Manjaro workstation with:
 - **Shell setup** — bash or fish with TPM, Starship, FiraCode Nerd Font (toggle in `vars/vars.yml`)
 - **Hardening** — sshd config, fail2ban, ufw desktop firewall (opt-in)
 
-AUR-only software (Chrome, VS Code, Slack, Zoom, gcloud-sdk, etc.) is installed via `yay`, which is bootstrapped from the official Manjaro repo.
+AUR-only software (Chrome, VS Code, Slack, Zoom, gcloud-sdk, etc.) is installed
+via the user's available AUR helper. The playbook auto-detects `paru` (CachyOS
+default) or `yay` (Manjaro / EndeavourOS default), and bootstraps `yay-bin`
+from the AUR via `makepkg` on vanilla Arch where neither is in the official repos.
+
+The pacman keyring step also adapts: `archlinux-keyring` is refreshed everywhere,
+and the distro-specific keyrings (`manjaro-keyring`, `cachyos-keyring`,
+`endeavouros-keyring`) are only refreshed on their respective distros.
 
 ## Requirements
 
-- Manjaro (current) or vanilla Arch Linux with `yay` available
+- Any Arch-family distro (Arch, Manjaro, CachyOS, EndeavourOS, Garuda, …)
 - A user account with sudo access
-- Internet access for package installs
+- Internet access for package installs (and for AUR helper bootstrap on vanilla Arch)
 - `multilib` enabled in `/etc/pacman.conf` if you want Steam
 
 ## Quick start
@@ -75,7 +88,15 @@ All toggles live in `vars/vars.yml`. The most useful ones:
 
 ## Testing with Molecule
 
-Two Molecule scenarios converge the playbook against a containerized `manjarolinux/base:latest`. The role detects `is_container` from `ansible_facts['virtualization_type']` and skips the `gnome` role plus any task that would try to start systemd services (sshd, fail2ban, docker) or hit netfilter (ufw), so container runs stay fast and don't fail on operations that aren't possible in an unprivileged container.
+Two Molecule scenarios converge the playbook against a containerized
+`manjarolinux/base:latest` (the Manjaro path is the most-exercised flavor).
+The role detects `is_container` from `ansible_facts['virtualization_type']`
+and skips the `gnome` role plus any task that would try to start systemd
+services (sshd, fail2ban, docker) or hit netfilter (ufw), so container runs
+stay fast and don't fail on operations that aren't possible in an unprivileged
+container. To test against vanilla Arch / CachyOS / EndeavourOS, swap the
+`image:` field in `molecule/default/molecule.yml` to e.g. `archlinux:latest`
+or `cachyos/cachyos-v3:latest`.
 
 ```sh
 make test-podman          # full create/converge/idempotence/verify on podman
@@ -112,7 +133,7 @@ ansible-playbook --syntax-check setup_workstation.yml
 
 - [`ansible-fedora-workstation-base`](https://github.com/mtharpe/ansible-fedora-workstation-base) — Fedora 43+
 - [`ansible-ubuntu-workstation-base`](https://github.com/mtharpe/ansible-ubuntu-workstation-base) — Ubuntu 24.04+
-- [`ansible-manjaro-workstation-base`](https://github.com/mtharpe/ansible-manjaro-workstation-base) — Manjaro/Arch (this repo)
+- [`ansible-manjaro-workstation-base`](https://github.com/mtharpe/ansible-manjaro-workstation-base) — Arch family: Arch, Manjaro, CachyOS, EndeavourOS, Garuda (this repo)
 
 ## License
 

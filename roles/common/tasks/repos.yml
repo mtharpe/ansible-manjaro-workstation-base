@@ -1,6 +1,7 @@
 ---
-# Manjaro/Arch: refresh mirrors and pacman database. AUR repositories are accessed
-# via the `yay` helper (installed in packages.yml) instead of dedicated repo files.
+# Arch family (Arch, Manjaro, CachyOS, EndeavourOS, Garuda, …): refresh mirrors
+# and pacman database. AUR repositories are accessed via an AUR helper
+# (installed in packages.yml) instead of dedicated repo files.
 
 # pacman speed tuning — set BEFORE any install so the bigger downloads benefit.
 # Older pacman defaulted to serial downloads; modern pacman defaults to 5.
@@ -15,8 +16,8 @@
     mode: '0644'
   become: true
 
-# makepkg.conf controls how AUR packages (built via yay) compile. Use every
-# CPU for parallel make and use a tmpfs build dir for less disk churn.
+# makepkg.conf controls how AUR packages compile. Use every
+# CPU for parallel make.
 - name: Optimize makepkg for parallel AUR builds
   ansible.builtin.lineinfile:
     path: /etc/makepkg.conf
@@ -24,9 +25,9 @@
     line: 'MAKEFLAGS="-j$(nproc)"'
     backrefs: false
   become: true
-  failed_when: false   # makepkg.conf may not exist on minimal manjaro images
+  failed_when: false   # makepkg.conf may not exist on minimal arch-family images
 
-# Some base images (notably the molecule-built manjarolinux/base) ship with no
+# Some base images (notably minimal arch-family containers) ship with no
 # packages flagged as explicitly-installed. The community.general.pacman module
 # preflights every install with `pacman -Qe`, which exits rc=1 when there are
 # no explicit packages — and the module treats that as a hard failure. Seed the
@@ -44,15 +45,45 @@
   changed_when: false
   failed_when: false
 
-- name: Refresh pacman keyring
+# archlinux-keyring is universal across the Arch family.
+- name: Refresh archlinux keyring
   community.general.pacman:
     name:
       - archlinux-keyring
-      - manjaro-keyring
     state: latest
     update_cache: true
   become: true
   failed_when: false
+
+# manjaro-keyring only exists on Manjaro; skip on other arch derivatives.
+- name: Refresh manjaro-keyring (Manjaro only)
+  community.general.pacman:
+    name:
+      - manjaro-keyring
+    state: latest
+  become: true
+  failed_when: false
+  when: ansible_facts['distribution'] | default('') == 'Manjaro'
+
+# CachyOS ships its own signing keyring for the cachyos-* repos.
+- name: Refresh cachyos-keyring (CachyOS only)
+  community.general.pacman:
+    name:
+      - cachyos-keyring
+    state: latest
+  become: true
+  failed_when: false
+  when: ansible_facts['distribution'] | default('') == 'CachyOS'
+
+# EndeavourOS ships its own signing keyring for the endeavouros repo.
+- name: Refresh endeavouros-keyring (EndeavourOS only)
+  community.general.pacman:
+    name:
+      - endeavouros-keyring
+    state: latest
+  become: true
+  failed_when: false
+  when: ansible_facts['distribution'] | default('') == 'EndeavourOS'
 
 - name: Refresh pacman package database
   community.general.pacman:

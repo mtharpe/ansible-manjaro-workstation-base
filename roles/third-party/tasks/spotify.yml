@@ -7,9 +7,9 @@
   failed_when: false
   tags: [third_party, spotify]
 
-- name: Install Spotify from AUR via yay
+- name: Install Spotify from AUR
   ansible.builtin.command:
-    cmd: yay -S --noconfirm --needed spotify
+    cmd: "{{ common_aur_helper }} -S --noconfirm --needed spotify"
   become: true
   become_user: "{{ local_user }}"
   register: spotify_install
