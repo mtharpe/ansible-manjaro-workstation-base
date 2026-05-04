@@ -15,12 +15,6 @@
   when: not google_chrome_bin.stat.exists
   tags: [third_party, chrome]
 
-- name: Check for user google-chrome.desktop
-  ansible.builtin.stat:
-    path: /home/{{ local_user }}/.local/share/applications/google-chrome.desktop
-  register: google_chrome_desktop
-  tags: [third_party, chrome]
-
 - name: Ensure user applications directory exists
   ansible.builtin.file:
     path: /home/{{ local_user }}/.local/share/applications
@@ -38,5 +32,4 @@
     owner: "{{ local_user }}"
     group: wheel
     mode: "0644"
-  when: not google_chrome_desktop.stat.exists
   tags: [third_party, chrome]
