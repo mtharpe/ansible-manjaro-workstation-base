@@ -1,0 +1,8 @@
+---
+# kubectl is in the official Arch/Manjaro repos as `kubectl`.
+- name: Install kubectl via pacman
+  community.general.pacman:
+    name: kubectl
+    state: present
+  become: true
+  tags: [third_party, kubectl]
