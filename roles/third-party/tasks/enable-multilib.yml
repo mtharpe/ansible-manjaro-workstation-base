@@ -1,0 +1,28 @@
+---
+# Reusable helper: enable the [multilib] repository in /etc/pacman.conf so
+# `lib32-*` packages can be installed. Steam, Wine, and Battle.net all ship
+# 32-bit components and silently fail to resolve without this.
+#
+# On a fresh Manjaro/Arch install /etc/pacman.conf has:
+#
+#   #[multilib]
+#   #Include = /etc/pacman.d/mirrorlist
+#
+# We uncomment both lines as a unit. The replace regex only matches the
+# commented form, so re-runs are a no-op once multilib is live.
+- name: Enable [multilib] repository in /etc/pacman.conf
+  ansible.builtin.replace:
+    path: /etc/pacman.conf
+    regexp: '(?m)^#\s*\[multilib\]\s*\n#\s*Include\s*=\s*/etc/pacman.d/mirrorlist'
+    replace: |-
+      [multilib]
+      Include = /etc/pacman.d/mirrorlist
+  become: true
+  register: multilib_pacman_conf
+
+- name: Refresh pacman db after enabling multilib  # noqa: no-handler
+  community.general.pacman:
+    update_cache: true
+  become: true
+  changed_when: false
+  when: multilib_pacman_conf is changed

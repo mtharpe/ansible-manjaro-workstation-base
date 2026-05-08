@@ -1,8 +1,23 @@
 ---
-- name: Install Steam
+# Steam is in [multilib] and pulls in lib32-* runtime libs; the multilib
+# repo must be enabled before pacman can resolve any of it.
+- name: Enable multilib repo for Steam runtime
+  ansible.builtin.include_tasks:
+    file: enable-multilib.yml
+    apply:
+      tags: [third_party, steam]
+  tags: [third_party, steam]
+
+# mangohud is the FPS/VRAM/CPU overlay used by both Steam (`mangohud
+# %command%` in launch options) and Lutris (toggled per-game). lib32-mangohud
+# is required for 32-bit games to render the overlay.
+- name: Install Steam and MangoHud overlay
   community.general.pacman:
-    name: steam
+    name:
+      - steam
+      - mangohud
+      - lib32-mangohud
     state: present
   become: true
-  failed_when: false   # multilib repo must be enabled in /etc/pacman.conf
+  failed_when: false
   tags: [third_party, steam]

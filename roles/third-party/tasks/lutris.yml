@@ -1,4 +1,13 @@
 ---
+# Battle.net's installer + many Wine prefixes are 32-bit, so the [multilib]
+# repo has to be enabled before any lib32-* package can be pulled in.
+- name: Enable multilib repo for 32-bit Wine/Battle.net libs
+  ansible.builtin.include_tasks:
+    file: enable-multilib.yml
+    apply:
+      tags: [third_party, lutris]
+  tags: [third_party, lutris]
+
 - name: Check for Wine
   ansible.builtin.stat:
     path: /usr/bin/wine
@@ -33,6 +42,7 @@
       - vulkan-icd-loader
       - lib32-vulkan-icd-loader
       - vulkan-tools
+      - mesa-utils
     state: present
   when: not lutris_installed.stat.exists
   become: true
@@ -51,6 +61,45 @@
       - sqlite
     state: present
   when: not lutris_installed.stat.exists
+  become: true
+  failed_when: false
+  tags: [third_party, lutris]
+
+# Lutris's installer scripts shell out to these for archive extraction, MIDI
+# soundfonts, MIME sniffing, and the optional certutil-based Battle.net cert
+# import. Arch's `python` already points at python3, so no python-is-python3
+# equivalent is needed here. `nss` provides certutil.
+- name: Install Lutris runtime helpers (extractors, soundfont, MIME, certutil)
+  community.general.pacman:
+    name:
+      - cabextract
+      - nss
+      - p7zip
+      - python-lxml
+      - python-magic
+      - soundfont-fluid
+    state: present
+  become: true
+  failed_when: false
+  tags: [third_party, lutris]
+
+# Battle.net's launcher and most Windows games shipped through Lutris are
+# 32-bit; Wine needs the matching lib32-* copies of these libs or installs
+# fail at runtime with cryptic Wine errors. This is the lib32-* set that
+# corresponds to the Ubuntu :i386 packages we identified working with
+# Battle.net.
+- name: Install 32-bit (lib32-) Wine/Battle.net runtime libraries
+  community.general.pacman:
+    name:
+      - lib32-alsa-lib
+      - lib32-curl
+      - lib32-dbus
+      - lib32-libldap
+      - lib32-libxml2
+      - lib32-mesa
+      - lib32-nss
+      - lib32-sdl2
+    state: present
   become: true
   failed_when: false
   tags: [third_party, lutris]
