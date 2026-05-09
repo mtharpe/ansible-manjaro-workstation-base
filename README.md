@@ -45,7 +45,11 @@ and the distro-specific keyrings (`manjaro-keyring`, `cachyos-keyring`,
    cd ansible-manjaro-workstation-base
    ```
 
-2. Edit `vars/vars.yml` to set your `local_user` and toggle features:
+2. Copy the example vars file and edit it to set your `local_user` and toggle features:
+
+   ```sh
+   cp vars/vars.example.yml vars/vars.yml
+   ```
 
    ```yaml
    local_user: yourusername
@@ -53,6 +57,10 @@ and the distro-specific keyrings (`manjaro-keyring`, `cachyos-keyring`,
    install_vscode: true
    install_fish: true
    ```
+
+   `vars/vars.yml` is gitignored so your personal toggles never get pushed.
+   Update `vars/vars.example.yml` when you want to change the sane defaults
+   that ship in the repo.
 
 3. Run the bootstrap script (installs Ansible if missing, applies the playbook):
 
