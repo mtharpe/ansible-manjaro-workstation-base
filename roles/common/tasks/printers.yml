@@ -1,0 +1,62 @@
+---
+# Bring up a full CUPS print stack on Arch/Manjaro: server + filters (which
+# includes cups-browsed for mDNS/IPP-Everywhere LAN discovery), the GTK admin
+# UI (system-config-printer), HPLIP for HP devices, and the foomatic/gutenprint
+# PPD databases. ipp-usb handles driverless USB devices. Arch has no
+# `printer-driver-all` metapackage — we list the equivalent driver bundles
+# explicitly.
+- name: Install CUPS and print drivers
+  community.general.pacman:
+    name:
+      - cups
+      - cups-pdf
+      - cups-filters
+      - system-config-printer
+      - hplip
+      - gutenprint
+      - foomatic-db
+      - foomatic-db-ppds
+      - ipp-usb
+    state: present
+  become: true
+  tags: [common, printers]
+
+# On Arch, the printer admin group is `lp` — being in it lets system-config-
+# printer / GNOME Settings authenticate via PolicyKit without per-action sudo
+# prompts. (`sys` covers cupsctl daemon controls; not needed for the GUI flow.)
+- name: Add {{ local_user }} to lp group (manage printers via GUI without sudo)
+  ansible.builtin.user:
+    name: "{{ local_user }}"
+    groups: [lp]
+    append: true
+  become: true
+  tags: [common, printers]
+
+- name: Enable and start CUPS services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - cups.service
+    - cups-browsed.service
+  become: true
+  when: not is_container | default(false)
+  tags: [common, printers]
+
+# CUPS needs 631/tcp (IPP) for printer admin + IPP printing and 5353/udp
+# (mDNS) for cups-browsed to discover IPP-Everywhere devices on the LAN.
+# Kept here rather than in system.yml so the firewall holes live with the
+# stack that justifies them.
+- name: Allow CUPS / mDNS through ufw
+  community.general.ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    comment: "{{ item.comment }}"
+  loop:
+    - { port: "631",  proto: "tcp", comment: "IPP (CUPS)" }
+    - { port: "5353", proto: "udp", comment: "mDNS (printer discovery)" }
+  become: true
+  when: not is_container | default(false)
+  tags: [common, printers]
