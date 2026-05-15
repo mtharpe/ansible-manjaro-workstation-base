@@ -16,9 +16,10 @@ Configures an Arch-family workstation with:
 
 - **Common packages** — developer tooling, fonts, multimedia codecs, system utilities (`roles/common`)
 - **Third-party apps** — Chrome, VS Code, Slack, Zoom, Docker, etc., gated by feature flags (`roles/third-party`)
-- **GNOME settings** — sensible dconf defaults, dark theme, workspace layout (`roles/gnome`)
+- **GNOME settings** — sensible dconf defaults, system-wide dark mode that also reaches legacy GTK2 and Qt apps, workspace layout (`roles/gnome`)
+- **Printing** — CUPS with broad driver coverage (Gutenprint/foomatic/HPLIP), the system-config-printer GUI, and automatic mDNS/IPP network printer discovery (`roles/common/tasks/printers.yml`)
 - **Shell setup** — bash or fish with TPM, Starship, FiraCode Nerd Font (toggle in `vars/vars.yml`)
-- **Hardening** — sshd config, fail2ban, ufw desktop firewall (opt-in)
+- **Hardening** — fail2ban with progressive bans (on by default), ufw desktop firewall, optional sshd hardening
 
 AUR-only software (Chrome, VS Code, Slack, Zoom, gcloud-sdk, etc.) is installed
 via the user's available AUR helper. The playbook auto-detects `paru` (CachyOS
@@ -94,8 +95,9 @@ All toggles live in `vars/vars.yml`. The most useful ones:
 | `install_bash` | `false` | Bash dotfiles |
 | `install_nerd_font` | `true` | FiraCode Nerd Font for prompts/icons |
 | `install_eza` | `true` | `eza` (modern `ls` replacement) |
+| `install_printers` | `true` | CUPS print stack — drivers, system-config-printer GUI, network discovery |
 | `enable_sshd` | `false` | Enable and harden sshd |
-| `enable_fail2ban` | `true` | Enable fail2ban with desktop-friendly defaults |
+| `enable_fail2ban` | `true` | fail2ban with progressive bans + ufw integration (on by default) |
 
 ## Testing with Molecule
 
@@ -103,7 +105,7 @@ Two Molecule scenarios converge the playbook against a containerized
 `manjarolinux/base:latest` (the Manjaro path is the most-exercised flavor).
 The role detects `is_container` from `ansible_facts['virtualization_type']`
 and skips the `gnome` role plus any task that would try to start systemd
-services (sshd, fail2ban, docker) or hit netfilter (ufw), so container runs
+services (sshd, fail2ban, docker, cups) or hit netfilter (ufw), so container runs
 stay fast and don't fail on operations that aren't possible in an unprivileged
 container. To test against vanilla Arch / CachyOS / EndeavourOS, swap the
 `image:` field in `molecule/default/molecule.yml` to e.g. `archlinux:latest`
