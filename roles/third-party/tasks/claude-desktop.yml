@@ -1,0 +1,25 @@
+---
+# Claude Desktop has no official Linux build. On the Arch family it's packaged
+# from the community aaddrick/claude-desktop-debian project as the
+# `claude-desktop-appimage` AUR package, which wraps the upstream Windows build
+# in an Electron AppImage. The AppImage launches Electron with --no-sandbox
+# (an upstream AppImage limitation, separate from the cowork sandbox below).
+#
+# cowork uses bubblewrap (bwrap) as its sandbox backend. Unlike Ubuntu 23.10+,
+# the Arch family permits unprivileged user namespaces out of the box, so no
+# AppArmor workaround is needed here — installing bubblewrap is enough.
+- name: Install Claude Desktop (claude-desktop-appimage) from the AUR
+  ansible.builtin.command:
+    cmd: "{{ common_aur_helper }} -S --noconfirm --needed claude-desktop-appimage"
+  become: true
+  become_user: "{{ local_user }}"
+  register: claude_desktop_install
+  changed_when: "'Nothing to do' not in claude_desktop_install.stdout"
+  tags: [third_party, claude-desktop]
+
+- name: Install bubblewrap for the cowork sandbox backend
+  community.general.pacman:
+    name: bubblewrap
+    state: present
+  become: true
+  tags: [third_party, claude-desktop, cowork]
