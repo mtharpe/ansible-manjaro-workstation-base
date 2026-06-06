@@ -90,6 +90,7 @@ All toggles live in `vars/vars.yml`. The most useful ones:
 | `install_gcloud` | `false` | Google Cloud SDK (AUR) + kubectl |
 | `install_ansible` | `false` | Ansible (pacman) for running playbooks locally |
 | `install_claude` | `true` | Claude Code CLI (official installer to `~/.local/bin`) |
+| `install_claude_desktop` | `true` | Claude Desktop + cowork (AUR `claude-desktop-appimage`; bubblewrap sandbox — Arch permits unprivileged userns, so no AppArmor profile needed) |
 | `install_kubectl` | `true` | kubectl (pacman) — standalone, separate from `install_gcloud` |
 | `install_fish` | `true` | Fish shell + Pure prompt + Fisher |
 | `install_bash` | `false` | Bash dotfiles |
